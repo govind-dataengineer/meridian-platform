@@ -1,0 +1,64 @@
+# Meridian local stack.  `make up` starts mysql + floci + adminer.
+# The `app` service is opt-in:  docker compose --profile app run --rm app
+name: meridian
+
+services:
+  mysql:
+    image: mysql:8.4                  # arm64 image exists, runs natively on M-series Macs
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: meridian_landing
+      MYSQL_USER: ${MYSQL_USER:-meridian}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-meridian}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      # Runs ONCE, on first start with an empty volume. `make reset` to re-run.
+      - ./db/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  floci:
+    # Local AWS emulator: S3, SQS, DynamoDB, Lambda, ... on one port. No account needed.
+    # Pin a release tag (e.g. floci/floci:1.x.y) once you're happy, so upgrades are deliberate.
+    image: floci/floci:${FLOCI_TAG:-latest}
+    ports:
+      - "4566:4566"
+    environment:
+      FLOCI_DEFAULT_REGION: us-east-1
+      FLOCI_HOSTNAME: floci           # so URLs Floci returns resolve inside compose
+    volumes:
+      - floci-data:/app/data
+      # Uncomment when you use Docker-backed services (Lambda, RDS, ECS) in later modules:
+      # - /var/run/docker.sock:/var/run/docker.sock
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+
+  app:
+    profiles: ["app"]
+    build: .
+    env_file: .env
+    environment:
+      MERIDIAN_DB_URL: mysql+pymysql://meridian:meridian@mysql:3306/meridian_landing
+      MERIDIAN_TRUSTED_DB_URL: mysql+pymysql://meridian:meridian@mysql:3306/meridian_retail
+      MERIDIAN_AWS_ENDPOINT_URL: http://floci:4566
+    depends_on:
+      mysql:
+        condition: service_healthy
+      floci:
+        condition: service_started
+    command: ["meridian", "ingest", "--source", "s3://meridian-landing/2026-09-18"]
+
+volumes:
+  mysql-data:
+  floci-data:

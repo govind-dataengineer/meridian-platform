@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian Platform Guide</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --surface-2: #f0efe9;
+    --text: #1f2421;
+    --muted: #5d6660;
+    --line: #d9d8cf;
+    --accent: #0f6b5c;
+    --accent-soft: #e0f0ec;
+    --warn: #8a5a00;
+    --warn-soft: #fbf1da;
+    --code-bg: #1e2422;
+    --code-text: #e6ebe8;
+    --code-muted: #a3aeaa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #151917;
+      --surface: #1d2220;
+      --surface-2: #262c29;
+      --text: #e8ecea;
+      --muted: #a2aca7;
+      --line: #39413d;
+      --accent: #5cc9b4;
+      --accent-soft: #1b3630;
+      --warn: #e8bd6a;
+      --warn-soft: #3a2f18;
+      --code-bg: #101412;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: 76px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  a { color: var(--accent); }
+  code {
+    font: 0.88em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: var(--surface-2);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    overflow-wrap: anywhere;
+  }
+  h1, h2, h3 { line-height: 1.25; }
+  h2 { font-size: 1.45rem; margin: 2.4rem 0 0.6rem; }
+  h2:first-child { margin-top: 0; }
+  h3 { font-size: 1.05rem; margin: 1.4rem 0 0.4rem; }
+  p { margin: 0.5rem 0 0.9rem; }
+
+  header.top { padding: 2rem 1.25rem 1rem; }
+  .wrap { max-width: 1120px; margin: 0 auto; }
+  .prose { max-width: 760px; }
+  header.top h1 { margin: 0 0 0.3rem; font-size: 1.9rem; }
+  header.top p { margin: 0; color: var(--muted); }
+
+  nav.tabs {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding: 0 1.25rem;
+  }
+  nav.tabs .wrap { display: flex; gap: 0.25rem; overflow-x: auto; }
+  nav.tabs button {
+    appearance: none;
+    background: none;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+    padding: 0.8rem 0.9rem 0.7rem;
+    white-space: nowrap;
+  }
+  nav.tabs button:hover { color: var(--text); }
+  nav.tabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  main { padding: 1.75rem 1.25rem 4rem; }
+  [role="tabpanel"][hidden] { display: none; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.15rem; }
+  .card h3 { margin-top: 0; }
+  .card p:last-child { margin-bottom: 0; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 0.94rem; }
+  .table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; margin: 0.8rem 0 1.2rem; }
+  th, td { text-align: left; padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 0.82rem; color: var(--muted); font-weight: 600; }
+  tr:last-child td { border-bottom: 0; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  ol.flow { padding-left: 1.4rem; }
+  ol.flow li { margin-bottom: 0.45rem; }
+
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 1rem; margin: 1rem 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  details .table-wrap { margin-bottom: 0.3rem; }
+
+  .callout { border-left: 4px solid var(--accent); background: var(--accent-soft); border-radius: 0 8px 8px 0; padding: 0.75rem 1rem; margin: 1rem 0; }
+  .callout.warn { border-color: var(--warn); background: var(--warn-soft); }
+  .callout p { margin: 0.2rem 0 0.5rem; }
+  .callout p:last-child { margin-bottom: 0.2rem; }
+
+  /* Diagrams */
+  figure { margin: 1rem 0 1.25rem; }
+  .diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 0.75rem; overflow-x: auto; }
+  .diagram svg { display: block; width: 100%; height: auto; }
+  #full-diagram svg { min-width: 980px; }
+  #basic-diagram svg { min-width: 640px; }
+  figcaption { color: var(--muted); font-size: 0.88rem; margin-top: 0.5rem; }
+  svg text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: var(--text); }
+  svg .t { font-size: 15px; font-weight: 650; text-anchor: middle; }
+  svg .s { font-size: 12.5px; fill: var(--muted); text-anchor: middle; }
+  svg .lane-label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; fill: var(--muted); }
+  svg .row-label { font-size: 13px; font-weight: 650; }
+  svg .edge-label { font-size: 11px; fill: var(--muted); text-anchor: middle; }
+  svg .ph { font-size: 10.5px; font-weight: 700; fill: var(--muted); text-anchor: end; }
+  svg .chip-text { font-size: 12.5px; text-anchor: middle; }
+  svg .lane { fill: var(--surface-2); opacity: 0.55; }
+  svg .box { fill: var(--surface); stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 5 4; }
+  svg .built .box, svg .box.built-box { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.8; stroke-dasharray: none; }
+  svg .container { fill: none; stroke: var(--accent); stroke-width: 1.2; }
+  svg .edge { fill: none; stroke: var(--muted); stroke-width: 1.4; stroke-dasharray: 5 4; }
+  svg .edge.built-edge { stroke: var(--accent); stroke-width: 2; stroke-dasharray: none; }
+  svg .planned { transition: opacity 0.15s; }
+  figure[data-view="built"] svg .planned { opacity: 0.1; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; align-items: center; margin: 0.8rem 0; font-size: 0.92rem; }
+  .swatch { display: inline-block; width: 26px; height: 15px; border-radius: 3px; vertical-align: -2px; margin-right: 0.4rem; }
+  .swatch.built { background: var(--accent-soft); border: 2px solid var(--accent); }
+  .swatch.planned { background: var(--surface); border: 1.5px dashed var(--muted); }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-left: auto; }
+  .seg button { appearance: none; border: 0; background: var(--surface); color: var(--text); font: inherit; font-size: 0.88rem; padding: 0.35rem 0.8rem; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: var(--surface); font-weight: 600; }
+
+  /* Setup steps */
+  .progress { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin: 1rem 0 1.5rem; }
+  .bar { flex: 1 1 200px; height: 8px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+  .bar span { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.2s; }
+  .link-btn { appearance: none; background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; font-size: 0.9rem; text-decoration: underline; padding: 0; }
+
+  .step { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.15rem; margin-bottom: 0.9rem; max-width: 860px; }
+  .step.done { border-color: var(--accent); }
+  .step-head { display: flex; align-items: center; gap: 0.7rem; }
+  .step-num { flex: none; width: 1.9rem; height: 1.9rem; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); font-weight: 700; font-size: 0.92rem; }
+  .step.done .step-num { background: var(--accent); color: var(--surface); }
+  .step-head h3 { margin: 0; flex: 1; }
+  .done-toggle { font-size: 0.86rem; color: var(--muted); display: flex; gap: 0.35rem; align-items: center; cursor: pointer; white-space: nowrap; }
+
+  .code-block { position: relative; margin: 0.7rem 0; }
+  .code-label { font-size: 0.78rem; font-weight: 600; color: var(--muted); margin: 0.8rem 0 0.2rem; }
+  pre {
+    margin: 0;
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-radius: 8px;
+    padding: 0.75rem 0.9rem;
+    overflow-x: auto;
+    font: 0.84rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  pre.cmd { padding-right: 4.5rem; }
+  pre.out { background: var(--surface-2); color: var(--text); }
+  .copy {
+    position: absolute; top: 0.4rem; right: 0.4rem;
+    background: #38423e; color: #e6ebe8;
+    border: 0; border-radius: 5px;
+    font: 0.75rem -apple-system, BlinkMacSystemFont, sans-serif;
+    padding: 0.25rem 0.55rem; cursor: pointer;
+  }
+  .copy:hover { background: #4a5651; }
+
+  /* ER diagram */
+  #er-diagram svg { min-width: 900px; }
+  svg .er-table { fill: var(--surface); stroke: var(--line); stroke-width: 1.4; }
+  svg .er-header { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.4; }
+  svg .er-header-retail { fill: var(--warn-soft); stroke: var(--warn); stroke-width: 1.4; }
+  svg .er-col { font-size: 12px; fill: var(--text); }
+  svg .er-col-muted { font-size: 11px; fill: var(--muted); }
+  svg .er-title { font-size: 13px; font-weight: 700; fill: var(--text); }
+  svg .er-badge { font-size: 9.5px; font-weight: 600; fill: var(--muted); letter-spacing: 0.04em; }
+  svg .er-edge { fill: none; stroke: var(--muted); stroke-width: 1.3; }
+  svg .er-edge-fk { stroke: var(--accent); stroke-width: 1.6; }
+  svg .er-cardinality { font-size: 11px; font-weight: 700; fill: var(--accent); }
+  svg .er-db-label { font-size: 12px; font-weight: 700; fill: var(--muted); letter-spacing: 0.05em; }
+  .col-spec { margin: 0.6rem 0 1.2rem; }
+  .col-spec h3 { margin: 1.6rem 0 0.3rem; display: flex; align-items: center; gap: 0.6rem; }
+  .col-spec h3:first-child { margin-top: 0; }
+  .badge { display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.15rem 0.5rem; border-radius: 4px; vertical-align: 2px; }
+  .badge-pk { background: var(--accent); color: var(--surface); }
+  .badge-fk { background: var(--warn); color: var(--surface); }
+  .badge-idx { background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); }
+  .badge-json { background: #6b4fa0; color: #fff; }
+  .badge-chk { background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); }
+  .col-grid { display: grid; grid-template-columns: minmax(160px, auto) minmax(100px, auto) 1fr; gap: 0; font-size: 0.9rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .col-grid > span { padding: 0.4rem 0.7rem; border-bottom: 1px solid var(--line); }
+  .col-grid > span:nth-child(3n+1) { font-weight: 600; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.84rem; }
+  .col-grid > span:nth-child(3n+2) { color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.82rem; }
+  .col-grid > span:nth-last-child(-n+3) { border-bottom: 0; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  @media print {
+    nav.tabs, .copy, .seg, .progress, .done-toggle { display: none; }
+    [role="tabpanel"][hidden] { display: block; }
+    #full-diagram svg, #basic-diagram svg { min-width: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <h1>Meridian Platform Guide</h1>
+    <p>The design, the architecture, and how to run it on your laptop. This guide grows with the project.</p>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap" role="tablist" aria-label="Guide sections">
+    <button role="tab" id="tab-design" aria-controls="design" aria-selected="true">1. Design basics</button>
+    <button role="tab" id="tab-architecture" aria-controls="architecture" aria-selected="false" tabindex="-1">2. Architecture</button>
+    <button role="tab" id="tab-datamodel" aria-controls="datamodel" aria-selected="false" tabindex="-1">3. Data model</button>
+    <button role="tab" id="tab-setup" aria-controls="setup" aria-selected="false" tabindex="-1">4. Setup &amp; run</button>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+
+<!-- ============================ TAB 1: DESIGN BASICS ============================ -->
+<section role="tabpanel" id="design" aria-labelledby="tab-design">
+  <div class="prose">
+    <h2>What Meridian is</h2>
+    <p>Meridian is a fictional retailer. This project builds its platform one course module at a time. <strong>The part that exists today is the data pipeline:</strong> it takes files of orders and support cases, checks every row, and decides whether each row can be trusted.</p>
+  </div>
+
+  <h2>HLD and LLD in one minute</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>HLD: High-Level Design</h3>
+      <p><strong>Looks at the whole system.</strong> What are the big pieces, and how does data move between them?</p>
+      <p>Example: "Files go to S3, a Python job checks them, and results go to MySQL."</p>
+    </div>
+    <div class="card">
+      <h3>LLD: Low-Level Design</h3>
+      <p><strong>Looks inside one piece.</strong> What are the modules, functions, data types and tables?</p>
+      <p>Example: "<code>rules.py</code> adds a <code>Finding</code> to a <code>Record</code>, and the worst finding sets its route."</p>
+    </div>
+  </div>
+
+  <h2>HLD: the system today</h2>
+  <figure id="basic-diagram">
+    <div class="diagram">
+      <svg viewBox="0 0 900 250" role="img" aria-label="CSV delivery is uploaded to the S3 landing bucket, read by meridian ingest, and each row is written to one of three places in the MySQL meridian_landing database: staging tables, the review queue, or rejected records.">
+        <defs>
+          <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--accent)"/></marker>
+        </defs>
+        <g class="built">
+          <rect class="box" x="10" y="85" width="150" height="72" rx="8"/>
+          <text class="t" x="85" y="116">CSV delivery</text>
+          <text class="s" x="85" y="136">3 files, 31 rows</text>
+          <rect class="box" x="205" y="85" width="150" height="72" rx="8"/>
+          <text class="t" x="280" y="116">S3 landing</text>
+          <text class="s" x="280" y="136">Floci, a local AWS</text>
+          <rect class="box" x="400" y="85" width="150" height="72" rx="8"/>
+          <text class="t" x="475" y="116">meridian ingest</text>
+          <text class="s" x="475" y="136">Python rules</text>
+
+          <rect class="container" x="600" y="6" width="290" height="236" rx="10"/>
+          <text class="s" x="745" y="26">MySQL: meridian_landing</text>
+          <rect class="box" x="620" y="38" width="250" height="58" rx="8"/>
+          <text class="t" x="745" y="62">Publish: 18 rows</text>
+          <text class="s" x="745" y="82">Staging tables, stg_*</text>
+          <rect class="box" x="620" y="108" width="250" height="58" rx="8"/>
+          <text class="t" x="745" y="132">Human review: 2 rows</text>
+          <text class="s" x="745" y="152">review_queue</text>
+          <rect class="box" x="620" y="178" width="250" height="58" rx="8"/>
+          <text class="t" x="745" y="202">Reject: 11 rows</text>
+          <text class="s" x="745" y="222">rejected_records, with reasons</text>
+        </g>
+        <path class="edge built-edge" d="M160 121H203" marker-end="url(#a1)"/>
+        <path class="edge built-edge" d="M355 121H398" marker-end="url(#a1)"/>
+        <path class="edge built-edge" d="M550 121H580V67H618" marker-end="url(#a1)"/>
+        <path class="edge built-edge" d="M580 121V137H618" marker-end="url(#a1)"/>
+        <path class="edge built-edge" d="M580 137V207H618" marker-end="url(#a1)"/>
+      </svg>
+    </div>
+    <figcaption>Row counts come from the sample delivery in <code>data/landing/</code>.</figcaption>
+  </figure>
+
+  <h3>The pieces</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Piece</th><th>Its job</th><th>Tool</th></tr></thead>
+    <tbody>
+      <tr><td>Landing bucket</td><td>Holds each delivery, in a folder named by date</td><td>Floci, which emulates AWS S3</td></tr>
+      <tr><td>Ingestion job</td><td>Reads a delivery, runs the rules, saves the results</td><td>Python, run with the <code>meridian</code> command</td></tr>
+      <tr><td><code>meridian_landing</code></td><td>Stores everything the job produces, plus an audit trail of every run</td><td>MySQL 8.4; the app can read and write</td></tr>
+      <tr><td><code>meridian_retail</code></td><td>The trusted course dataset: 20,000 orders and 25,000 cases</td><td>MySQL 8.4; the app can only read</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout prose">
+    <p>The job does not copy anything into <code>meridian_retail</code> yet. Published rows stop at the <code>stg_*</code> staging tables.</p>
+  </div>
+
+  <h2>LLD: inside the ingestion job</h2>
+  <h3>What happens during <code>meridian ingest</code></h3>
+  <ol class="flow prose">
+    <li><a href="../src/meridian/cli.py"><code>cli.py</code></a> receives the command and loads settings from <a href="../src/meridian/config.py"><code>config.py</code></a>.</li>
+    <li><a href="../src/meridian/ingest/sources.py"><code>sources.py</code></a> reads the three CSVs, from S3 or a local folder, and fingerprints their bytes with SHA-256. The result is a <code>LandingBatch</code>.</li>
+    <li><a href="../src/meridian/ingest/pipeline.py"><code>pipeline.py</code></a> runs each rule from <a href="../src/meridian/ingest/rules.py"><code>rules.py</code></a> and returns a <code>RunResult</code>. It reads and writes nothing outside memory, so the same input always gives the same answer.</li>
+    <li><a href="../src/meridian/ingest/store.py"><code>store.py</code></a> saves the whole result in one database transaction: either all of it lands, or none of it does.</li>
+  </ol>
+
+  <h3>Main data types</h3>
+  <p class="prose">These live in <a href="../src/meridian/ingest/models.py"><code>models.py</code></a>.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Type</th><th>What it represents</th></tr></thead>
+    <tbody>
+      <tr><td><code>LandingBatch</code></td><td>One delivery: its parsed rows and the fingerprint of its content</td></tr>
+      <tr><td><code>Record</code></td><td>One row, plus the problems found in it</td></tr>
+      <tr><td><code>Finding</code></td><td>One problem: which rule fired, on which row, and why</td></tr>
+      <tr><td><code>Route</code></td><td>Where a row goes: <code>PUBLISH</code>, <code>HUMAN_REVIEW</code> or <code>REJECT</code></td></tr>
+      <tr><td><code>RunResult</code></td><td>The outcome of a run: <code>PUBLISHED</code>, <code>PAUSED</code> or <code>DUPLICATE</code>, plus all records</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>The rule to remember: the worst finding wins</h3>
+  <p class="prose">A row can trigger several rules, and the most severe one decides its route. <strong>REJECT beats HUMAN_REVIEW, and HUMAN_REVIEW beats PUBLISH.</strong></p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Route</th><th>When</th><th>Real example from the sample data</th></tr></thead>
+    <tbody>
+      <tr><td>Publish</td><td>No rule objected</td><td>Order <code>MR-501</code></td></tr>
+      <tr><td>Human review</td><td>The data is readable, but the sources disagree and code can't tell which is right</td><td><code>MCS-502</code>: order says 2026-09-15, issue says 2026-09-14</td></tr>
+      <tr><td>Reject</td><td>The row is broken</td><td><code>MR-503</code>: delivery date <code>17-09-2026</code> is not YYYY-MM-DD</td></tr>
+    </tbody>
+  </table></div>
+
+  <details>
+    <summary>See all nine validation rules</summary>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Rule</th><th>Check</th><th>If it fails</th></tr></thead>
+      <tbody>
+        <tr><td>VR-001</td><td><code>case_id</code> is present</td><td>Reject the row</td></tr>
+        <tr><td>VR-002</td><td><code>case_id</code> is unique (both duplicates fail)</td><td>Reject the row</td></tr>
+        <tr><td>VR-003</td><td>A RETURN or DAMAGE case has an order</td><td>Reject the row</td></tr>
+        <tr><td>VR-004</td><td><code>review_status</code> is PENDING, APPROVED or REJECTED</td><td>Reject the row</td></tr>
+        <tr><td>VR-005</td><td><code>delivery_date</code> is YYYY-MM-DD; a failed order also blocks its cases</td><td>Reject the row</td></tr>
+        <tr><td>VR-006</td><td>Order and issue delivery dates agree</td><td>Send to human review</td></tr>
+        <tr><td>VR-007</td><td>All files and columns exist</td><td>Pause the whole run; publish nothing</td></tr>
+        <tr><td>VR-008</td><td>The extract is newer than 24 hours</td><td>Warn, but continue</td></tr>
+        <tr><td>VR-009</td><td>The same content was not already published</td><td>Mark the run DUPLICATE; publish nothing new</td></tr>
+      </tbody>
+    </table></div>
+  </details>
+
+  <h3>Landing database tables</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Purpose</th><th>Tables</th></tr></thead>
+    <tbody>
+      <tr><td>Audit trail of every run</td><td><code>ingest_runs</code>, <code>ingest_findings</code></td></tr>
+      <tr><td>Rows that passed</td><td><code>stg_orders</code>, <code>stg_support_cases</code>, <code>stg_issue_records</code></td></tr>
+      <tr><td>Rows a person must decide</td><td><code>review_queue</code></td></tr>
+      <tr><td>Rows that failed, with reasons</td><td><code>rejected_records</code></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============================ TAB 2: FULL ARCHITECTURE ============================ -->
+<section role="tabpanel" id="architecture" aria-labelledby="tab-architecture" hidden>
+  <div class="prose">
+    <h2>The complete high-level design</h2>
+    <p>This is the whole platform as planned in <a href="ROADMAP.md"><code>ROADMAP.md</code></a>. Only the data pipeline at the bottom exists today, plus the tooling marked as built. The labels P2 to P8 show which roadmap phase adds each piece.</p>
+  </div>
+
+  <figure id="full-diagram" data-view="all">
+    <div class="legend">
+      <span><span class="swatch built"></span>Built today</span>
+      <span><span class="swatch planned"></span>Planned</span>
+      <span class="seg" role="group" aria-label="Choose what the diagram shows">
+        <button type="button" data-view="all" aria-pressed="true">Full plan</button>
+        <button type="button" data-view="built" aria-pressed="false">Built today</button>
+      </span>
+    </div>
+    <div class="diagram">
+      <svg viewBox="0 0 1200 905" role="img" aria-label="Layered architecture of the Meridian platform. People use a React dashboard that calls a FastAPI backend. An AI agent and RAG assistant use a model gateway. Redis, SQS and SNS, and Kafka support the backend. The built data layer takes CSV deliveries through S3 and the ingest job into MySQL. The phase table below this diagram lists every piece in text.">
+        <defs>
+          <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--accent)"/></marker>
+          <marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--muted)"/></marker>
+        </defs>
+
+        <!-- Lanes -->
+        <rect class="lane" x="20" y="16" width="1160" height="84" rx="8"/>
+        <rect class="lane" x="20" y="108" width="1160" height="92" rx="8"/>
+        <rect class="lane" x="20" y="208" width="1160" height="196" rx="8"/>
+        <rect class="lane" x="20" y="412" width="1160" height="96" rx="8"/>
+        <rect class="lane" x="20" y="516" width="1160" height="216" rx="8"/>
+        <rect class="lane" x="20" y="740" width="1160" height="150" rx="8"/>
+        <text class="lane-label" x="32" y="38">PEOPLE</text>
+        <text class="lane-label" x="32" y="130">APPS</text>
+        <text class="lane-label" x="32" y="230">BACKEND &amp; AI</text>
+        <text class="lane-label" x="32" y="434">MESSAGING</text>
+        <text class="lane-label" x="32" y="538">DATA</text>
+        <text class="lane-label" x="32" y="762">PLATFORM</text>
+
+        <!-- Planned edges -->
+        <g class="planned">
+          <path class="edge" d="M195 82V122" marker-end="url(#ap)"/>
+          <path class="edge" d="M340 82V122" marker-end="url(#ap)"/>
+          <path class="edge" d="M485 82V122" marker-end="url(#ap)"/>
+          <path class="edge" d="M340 184V226" marker-end="url(#ap)"/>
+          <text class="edge-label" x="384" y="210">REST + SSE</text>
+          <path class="edge" d="M740 184V226" marker-end="url(#ap)"/>
+          <path class="edge" d="M620 263H552" marker-end="url(#ap)"/>
+          <text class="edge-label" x="585" y="255">tools</text>
+          <path class="edge" d="M550 349H618" marker-end="url(#ap)"/>
+          <text class="edge-label" x="585" y="341">asks</text>
+          <path class="edge" d="M860 263H895V295H928" marker-end="url(#ap)"/>
+          <path class="edge" d="M860 349H895V317H928" marker-end="url(#ap)"/>
+          <path class="edge" d="M860 245H1047V186" marker-end="url(#ap)"/>
+          <text class="edge-label" x="955" y="238">webhook</text>
+          <path class="edge" d="M187 384V428" marker-end="url(#ap)"/>
+          <path class="edge" d="M320 384V428" marker-end="url(#ap)"/>
+          <path class="edge" d="M457 384V428" marker-end="url(#ap)"/>
+          <path class="edge" d="M540 384V546" marker-end="url(#ap)"/>
+          <text class="edge-label" x="578" y="460">read / write</text>
+          <path class="edge" d="M850 384V564" marker-end="url(#ap)"/>
+          <text class="edge-label" x="884" y="460">search</text>
+          <path class="edge" d="M1047 342V428" marker-end="url(#ap)"/>
+          <path class="edge" d="M800 690H1092V648" marker-end="url(#ap)"/>
+          <text class="edge-label" x="950" y="682">reporting models</text>
+        </g>
+
+        <!-- People -->
+        <g class="planned">
+          <rect class="box" x="130" y="34" width="130" height="48" rx="8"/>
+          <text class="t" x="195" y="63">Ops reviewer</text>
+          <rect class="box" x="275" y="34" width="130" height="48" rx="8"/>
+          <text class="t" x="340" y="63">Support agent</text>
+          <rect class="box" x="420" y="34" width="130" height="48" rx="8"/>
+          <text class="t" x="485" y="63">Admin</text>
+        </g>
+
+        <!-- Apps -->
+        <g class="planned">
+          <rect class="box" x="130" y="124" width="420" height="60" rx="8"/>
+          <text class="t" x="340" y="148">Ops dashboard</text>
+          <text class="s" x="340" y="168">React + TypeScript: KPI tiles, review queue</text>
+          <text class="ph" x="542" y="140">P3</text>
+
+          <rect class="box" x="620" y="124" width="240" height="60" rx="8"/>
+          <text class="t" x="740" y="148">MCP clients</text>
+          <text class="s" x="740" y="168">Any tool that speaks MCP</text>
+          <text class="ph" x="852" y="140">P5</text>
+
+          <rect class="box" x="930" y="124" width="235" height="60" rx="8"/>
+          <text class="t" x="1047" y="148">Legacy system</text>
+          <text class="s" x="1047" y="168">Mock service in compose</text>
+          <text class="ph" x="1157" y="140">P5</text>
+        </g>
+
+        <!-- Backend & AI -->
+        <g class="planned">
+          <rect class="box" x="130" y="228" width="420" height="156" rx="8"/>
+          <text class="t" x="340" y="272">Backend API</text>
+          <text class="s" x="340" y="296">FastAPI, OAuth2 + JWT, role-based access</text>
+          <text class="s" x="340" y="316">Orders, cases, review queue, ingestion runs</text>
+          <text class="s" x="340" y="336">Order state machine, live updates</text>
+          <text class="ph" x="542" y="244">P2</text>
+
+          <rect class="box" x="620" y="228" width="240" height="70" rx="8"/>
+          <text class="t" x="740" y="256">AI agent</text>
+          <text class="s" x="740" y="278">LangGraph, human approval</text>
+          <text class="ph" x="852" y="244">P5</text>
+
+          <rect class="box" x="620" y="314" width="240" height="70" rx="8"/>
+          <text class="t" x="740" y="342">RAG assistant</text>
+          <text class="s" x="740" y="364">Cited answers, PII redaction</text>
+          <text class="ph" x="852" y="330">P4</text>
+
+          <rect class="box" x="930" y="270" width="235" height="72" rx="8"/>
+          <text class="t" x="1047" y="300">Model gateway</text>
+          <text class="s" x="1047" y="322">Routing, caching, cost tracking</text>
+          <text class="ph" x="1157" y="286">P6</text>
+        </g>
+
+        <!-- Messaging -->
+        <g class="planned">
+          <rect class="box" x="130" y="430" width="115" height="60" rx="8"/>
+          <text class="t" x="187" y="456">Redis</text>
+          <text class="s" x="187" y="476">Read cache</text>
+          <text class="ph" x="239" y="444">P2</text>
+
+          <rect class="box" x="255" y="430" width="130" height="60" rx="8"/>
+          <text class="t" x="320" y="456">SQS + SNS</text>
+          <text class="s" x="320" y="476">Outbox, notices</text>
+          <text class="ph" x="379" y="444">P2</text>
+
+          <rect class="box" x="395" y="430" width="125" height="60" rx="8"/>
+          <text class="t" x="457" y="456">Kafka</text>
+          <text class="s" x="457" y="476">Order events</text>
+          <text class="ph" x="514" y="444">P6</text>
+
+          <rect class="box" x="930" y="430" width="235" height="60" rx="8"/>
+          <text class="t" x="1047" y="456">LLM models</text>
+          <text class="s" x="1047" y="476">Ollama locally, hosted optional</text>
+          <text class="ph" x="1157" y="444">P4</text>
+        </g>
+
+        <!-- Data: built -->
+        <g class="built">
+          <rect class="box" x="36" y="566" width="110" height="80" rx="8"/>
+          <text class="t" x="91" y="600">CSV delivery</text>
+          <text class="s" x="91" y="622">3 files per drop</text>
+
+          <rect class="box" x="190" y="566" width="140" height="80" rx="8"/>
+          <text class="t" x="260" y="600">S3 landing</text>
+          <text class="s" x="260" y="622">Floci now, AWS later</text>
+
+          <rect class="box" x="374" y="566" width="136" height="80" rx="8"/>
+          <text class="t" x="442" y="592">meridian ingest</text>
+          <text class="s" x="442" y="612">Python rules</text>
+          <text class="s" x="442" y="630">VR-001 to VR-009</text>
+
+          <rect class="container" x="530" y="548" width="270" height="170" rx="10"/>
+          <text class="s" x="665" y="568">MySQL 8.4</text>
+          <rect class="box" x="542" y="578" width="246" height="60" rx="8"/>
+          <text class="t" x="665" y="602">meridian_landing</text>
+          <text class="s" x="665" y="622">Runs, staging, review, rejects</text>
+          <rect class="box" x="542" y="648" width="246" height="60" rx="8"/>
+          <text class="t" x="665" y="672">meridian_retail</text>
+          <text class="s" x="665" y="692">Trusted, read-only for the app</text>
+        </g>
+        <path class="edge built-edge" d="M146 606H188" marker-end="url(#ab)"/>
+        <text class="edge-label" x="167" y="598">upload</text>
+        <path class="edge built-edge" d="M330 606H372" marker-end="url(#ab)"/>
+        <text class="edge-label" x="351" y="598">read</text>
+        <path class="edge built-edge" d="M510 608H540" marker-end="url(#ab)"/>
+
+        <!-- Data: planned -->
+        <g class="planned">
+          <rect class="box" x="826" y="566" width="174" height="80" rx="8"/>
+          <text class="t" x="913" y="600">Postgres + pgvector</text>
+          <text class="s" x="913" y="622">Case notes, embeddings</text>
+          <text class="ph" x="992" y="580">P2</text>
+
+          <rect class="box" x="1020" y="566" width="145" height="80" rx="8"/>
+          <text class="t" x="1092" y="600">dbt + DuckDB</text>
+          <text class="s" x="1092" y="622">Reporting</text>
+          <text class="ph" x="1157" y="580">P2</text>
+        </g>
+
+        <!-- Platform -->
+        <text class="row-label" x="130" y="780">Build &amp; ship</text>
+        <text class="row-label" x="130" y="822">Test &amp; watch</text>
+        <text class="row-label" x="130" y="864">Protect</text>
+
+        <g class="built">
+          <rect class="box" x="250" y="760" width="139" height="30" rx="15"/>
+          <text class="chip-text" x="319" y="780">GitHub Actions CI</text>
+          <rect class="box" x="399" y="760" width="118" height="30" rx="15"/>
+          <text class="chip-text" x="458" y="780">Docker Compose</text>
+          <rect class="box" x="250" y="802" width="146" height="30" rx="15"/>
+          <text class="chip-text" x="323" y="822">pytest, ruff, mypy</text>
+          <rect class="box" x="406" y="802" width="69" height="30" rx="15"/>
+          <text class="chip-text" x="440" y="822">Adminer</text>
+          <rect class="box" x="250" y="844" width="181" height="30" rx="15"/>
+          <text class="chip-text" x="340" y="864">Least-privilege DB user</text>
+        </g>
+        <g class="planned">
+          <rect class="box" x="527" y="760" width="90" height="30" rx="15"/>
+          <text class="chip-text" x="572" y="780">Trivy scan</text>
+          <rect class="box" x="627" y="760" width="139" height="30" rx="15"/>
+          <text class="chip-text" x="696" y="780">Kubernetes + Helm</text>
+          <rect class="box" x="776" y="760" width="62" height="30" rx="15"/>
+          <text class="chip-text" x="807" y="780">ArgoCD</text>
+          <rect class="box" x="848" y="760" width="83" height="30" rx="15"/>
+          <text class="chip-text" x="889" y="780">Terraform</text>
+          <rect class="box" x="941" y="760" width="83" height="30" rx="15"/>
+          <text class="chip-text" x="982" y="780">ECR + EKS</text>
+
+          <rect class="box" x="485" y="802" width="174" height="30" rx="15"/>
+          <text class="chip-text" x="572" y="822">OpenTelemetry + Jaeger</text>
+          <rect class="box" x="669" y="802" width="111" height="30" rx="15"/>
+          <text class="chip-text" x="724" y="822">k6 load tests</text>
+          <rect class="box" x="790" y="802" width="111" height="30" rx="15"/>
+          <text class="chip-text" x="845" y="822">SLOs + alerts</text>
+          <rect class="box" x="911" y="802" width="97" height="30" rx="15"/>
+          <text class="chip-text" x="959" y="822">Chaos tests</text>
+          <rect class="box" x="1018" y="802" width="118" height="30" rx="15"/>
+          <text class="chip-text" x="1077" y="822">RAGAS + MLflow</text>
+
+          <rect class="box" x="441" y="844" width="125" height="30" rx="15"/>
+          <text class="chip-text" x="503" y="864">Secrets Manager</text>
+          <rect class="box" x="576" y="844" width="83" height="30" rx="15"/>
+          <text class="chip-text" x="617" y="864">OWASP ZAP</text>
+          <rect class="box" x="669" y="844" width="174" height="30" rx="15"/>
+          <text class="chip-text" x="756" y="864">Prompt-injection tests</text>
+          <rect class="box" x="853" y="844" width="104" height="30" rx="15"/>
+          <text class="chip-text" x="905" y="864">Threat model</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption>Only the main connections are drawn, to keep the diagram readable. For example, the backend will also use Postgres.</figcaption>
+  </figure>
+
+  <h2>How to read it</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Today: data comes in</h3>
+      <p>A delivery moves left to right along the Data row. Run it yourself in the <a href="#setup" data-goto="setup">Setup &amp; run</a> tab.</p>
+    </div>
+    <div class="card">
+      <h3>Next: people act on it</h3>
+      <p>The API and dashboard let a reviewer see the review queue and decide a conflict, such as case <code>MCS-502</code>.</p>
+    </div>
+    <div class="card">
+      <h3>Later: AI helps</h3>
+      <p>The assistant answers with citations. The agent calls the same backend functions as tools, and consequential actions wait for human approval.</p>
+    </div>
+  </div>
+
+  <h2>Design rules that hold it together</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Rule</th><th>Why it matters</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Same stack locally and in CI</strong></td><td>CI runs the same <code>docker-compose.yml</code>, so "works on my machine" means something.</td></tr>
+      <tr><td><strong>Config only through env vars</strong></td><td>Floci becomes real AWS by clearing <code>MERIDIAN_AWS_ENDPOINT_URL</code>, with no code changes.</td></tr>
+      <tr><td><strong>Pure logic, thin I/O</strong></td><td>Rules are plain functions that are easy to test. Databases, S3 and LLMs sit behind small adapters.</td></tr>
+      <tr><td><strong>Python decides, the model explains</strong></td><td>The rules you have now become the tools the agent calls later.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Build order</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Phase</th><th>Modules</th><th>What it adds</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1. Data foundation</strong></td><td>1–2</td><td>MySQL, S3 landing bucket, validation rules, run audit trail, CI</td><td><strong>Built</strong>; 5 extras still open</td></tr>
+      <tr><td>2. Backend API</td><td>3</td><td>FastAPI, auth and roles, order state machine, SQS/SNS, Redis, Postgres + pgvector, tracing, dbt + DuckDB</td><td>Planned</td></tr>
+      <tr><td>3. Ops dashboard</td><td>4</td><td>React app, KPI tiles, review queue, Playwright smoke test</td><td>Planned</td></tr>
+      <tr><td>4. RAG assistant</td><td>5</td><td>Knowledge base, cited answers, model adapter, evals, PII redaction</td><td>Planned</td></tr>
+      <tr><td>5. The agent</td><td>6</td><td>LangGraph agent, MCP server, human approval, legacy connector, red-team tests</td><td>Planned</td></tr>
+      <tr><td>6. Scale &amp; AI platform</td><td>7–8</td><td>Load tests, rate limiting, Kafka, saga, model gateway, MLflow</td><td>Planned</td></tr>
+      <tr><td>7. Ship it</td><td>9–11</td><td>Hardened images, Kubernetes + Helm, ArgoCD, Terraform, ECR + EKS</td><td>Planned</td></tr>
+      <tr><td>8. Harden</td><td>12–14</td><td>SLOs and alerts, chaos tests, secrets management, OWASP ZAP, threat model</td><td>Planned</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============================ TAB 3: DATA MODEL ============================ -->
+<section role="tabpanel" id="datamodel" aria-labelledby="tab-datamodel" hidden>
+
+  <div class="prose">
+    <h2>Data model</h2>
+    <p>Two databases, two purposes. <strong><code>meridian_retail</code></strong> is the trusted system of record seeded from the course SQL pack (read-only for the app). <strong><code>meridian_landing</code></strong> is written by the ingestion pipeline and holds everything it produces: staged rows, rejected rows, review items and a full audit trail.</p>
+  </div>
+
+  <h2>Entity-relationship diagram</h2>
+  <figure id="er-diagram">
+    <div class="legend">
+      <span><span class="swatch built"></span>meridian_landing (pipeline writes)</span>
+      <span><span class="swatch" style="background:var(--warn-soft);border:2px solid var(--warn)"></span>meridian_retail (course data, read-only)</span>
+    </div>
+    <div class="diagram">
+      <svg viewBox="0 0 1140 780" role="img" aria-label="Entity-relationship diagram showing all 12 tables across meridian_landing and meridian_retail databases, with foreign key and logical relationships.">
+        <defs>
+          <marker id="erd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--accent)"/></marker>
+          <marker id="erd-dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto"><circle cx="5" cy="5" r="4" style="fill:var(--muted)"/></marker>
+        </defs>
+
+        <!-- DB labels -->
+        <text class="er-db-label" x="290" y="20">MERIDIAN_LANDING</text>
+        <text class="er-db-label" x="820" y="20">MERIDIAN_RETAIL</text>
+        <line x1="570" y1="8" x2="570" y2="770" stroke="var(--line)" stroke-width="1" stroke-dasharray="6 4"/>
+
+        <!-- === LANDING: ingest_runs === -->
+        <rect class="er-header" x="20" y="38" width="240" height="28" rx="6" ry="6"/>
+        <rect class="er-table" x="20" y="56" width="240" height="152" rx="0 0 6 6"/>
+        <text class="er-title" x="32" y="58">ingest_runs</text>
+        <text class="er-col" x="32" y="80"><tspan font-weight="700">run_id</tspan> <tspan class="er-col-muted">VARCHAR(36) PK</tspan></text>
+        <text class="er-col" x="32" y="98">source <tspan class="er-col-muted">VARCHAR(500)</tspan></text>
+        <text class="er-col" x="32" y="116">content_hash <tspan class="er-col-muted">VARCHAR(64) IDX</tspan></text>
+        <text class="er-col" x="32" y="134">status <tspan class="er-col-muted">VARCHAR(20)</tspan></text>
+        <text class="er-col" x="32" y="152">run_at <tspan class="er-col-muted">DATETIME</tspan></text>
+        <text class="er-col" x="32" y="170">finished_at <tspan class="er-col-muted">DATETIME</tspan></text>
+        <text class="er-col" x="32" y="188">summary <tspan class="er-col-muted">JSON</tspan></text>
+
+        <!-- === LANDING: ingest_findings === -->
+        <rect class="er-header" x="20" y="228" width="240" height="28" rx="6" ry="6"/>
+        <rect class="er-table" x="20" y="246" width="240" height="152" rx="0 0 6 6"/>
+        <text class="er-title" x="32" y="248">ingest_findings</text>
+        <text class="er-col" x="32" y="270"><tspan font-weight="700">id</tspan> <tspan class="er-col-muted">INT PK AUTO</tspan></text>
+        <text class="er-col" x="32" y="288">run_id <tspan class="er-col-muted">VARCHAR(36) FK IDX</tspan></text>
+        <text class="er-col" x="32" y="306">file <tspan class="er-col-muted">VARCHAR(50)</tspan></text>
+        <text class="er-col" x="32" y="324">row_number <tspan class="er-col-muted">INT NULL</tspan></text>
+        <text class="er-col" x="32" y="342">record_key <tspan class="er-col-muted">VARCHAR(50) NULL</tspan></text>
+        <text class="er-col" x="32" y="360">rule_id <tspan class="er-col-muted">VARCHAR(10)</tspan></text>
+        <text class="er-col" x="32" y="378">route <tspan class="er-col-muted">VARCHAR(20)</tspan></text>
+        <text class="er-col" x="32" y="396">message <tspan class="er-col-muted">TEXT</tspan></text>
+        <!-- FK: findings.run_id → runs.run_id -->
+        <path class="er-edge er-edge-fk" d="M140 228V208" marker-end="url(#erd-arrow)"/>
+
+        <!-- === LANDING: stg_orders === -->
+        <rect class="er-header" x="300" y="38" width="240" height="28" rx="6" ry="6"/>
+        <rect class="er-table" x="300" y="56" width="240" height="134" rx="0 0 6 6"/>
+        <text class="er-title" x="312" y="58">stg_orders</text>
+        <text class="er-col" x="312" y="80"><tspan font-weight="700">order_id</tspan> <tspan class="er-col-muted">VARCHAR(12) PK</tspan></text>
+        <text class="er-col" x="312" y="98">product <tspan class="er-col-muted">VARCHAR(100)</tspan></text>
+        <text class="er-col" x="312" y="116">order_date <tspan class="er-col-muted">DATE</tspan></text>
+        <text class="er-col" x="312" y="134">delivery_date <tspan class="er-col-muted">DATE NULL</tspan></text>
+        <text class="er-col" x="312" y="152">payment_status <tspan class="er-col-muted">VARCHAR(20)</tspan></text>
+        <text class="er-col" x="312" y="170">extract_generated_at <tspan class="er-col-muted">DATETIME</tspan></text>
+        <text class="er-col" x="312" y="188">run_id <tspan class="er-col-muted">VARCHAR(36)</tspan></text>
+
+        <!-- === LANDING: stg_support_cases === -->
+        <rect class="er-header" x="300" y="228" width="240" height="28" rx="6" ry="6"/>
+        <rect class="er-table" x="300" y="246" width="240" height="152" rx="0 0 6 6"/>
+        <text class="er-title" x="312" y="248">stg_support_cases</text>
+        <text class="er-col" x="312" y="270"><tspan font-weight="700">case_id</tspan> <tspan class="er-col-muted">VARCHAR(12) PK</tspan></text>
+        <text class="er-col" x="312" y="288">order_id <tspan class="er-col-muted">VARCHAR(12) NULL</tspan></text>
+        <text class="er-col" x="312" y="306">received_at <tspan class="er-col-muted">DATETIME</tspan></text>
+        <text class="er-col" x="312" y="324">customer_question <tspan class="er-col-muted">TEXT</tspan></text>
+        <text class="er-col" x="312" y="342">case_type <tspan class="er-col-muted">VARCHAR(20)</tspan></text>
+        <text class="er-col" x="312" y="360">review_status <tspan class="er-col-muted">VARCHAR(20)</tspan></text>
+        <text class="er-col" x="312" y="378">extract_generated_at <tspan class="er-col-muted">DATETIME</tspan></text>
+        <text class="er-col" x="312" y="396">run_id <tspan class="er-col-muted">VARCHAR(36)</tspan></text>
+        <!-- logical: stg_cases.order_id → stg_orders.order_id -->
+        <path class="er-edge" d="M420 228V192" marker-end="url(#erd-dot)" stroke-dasharray="4 3"/>
+        <text class="er-cardinality" x="428" y="216">n:1</text>
+
+        <!-- === LANDING: stg_issue_records === -->
+        <rect class="er-header" x="300" y="430" width="240" height="28" rx="6" ry="6"/>
+        <rect class="er-table" x="300" y="448" width="240" height="134" rx="0 0 6 6"/>
+        <text class="er-title" x="312" y="448">stg_issue_records</text>
+        <text class="er-col" x="312" y="470"><tspan font-weight="700">case_id</tspan> <tspan class="er-col-muted">VARCHAR(12) PK</tspan></text>
+        <text class="er-col" x="312" y="488">issue_type <tspan class="er-col-muted">VARCHAR(30)</tspan></text>
+        <text class="er-col" x="312" y="506">issue_details <tspan class="er-col-muted">TEXT</tspan></text>
+        <text class="er-col" x="312" y="524">reported_delivery_date <tspan class="er-col-muted">DATE NULL</tspan></text>
+        <text class="er-col" x="312" y="542">evidence_status <tspan class="er-col-muted">VARCHAR(20)</tspan></text>
+        <text class="er-col" x="312" y="560">extract_generated_at <tspan class="er-col-muted">DATETIME</tspan></text>
+        <text class="er-col" x="312" y="578">run_id <tspan class="er-col-muted">VARCHAR(36)</tspan></text>
+        <!-- logical: stg_issues.case_id → stg_cases.case_id -->
+        <path class="er-edge" d="M420 430V398" marker-end="url(#erd-dot)" stroke-dasharray="4 3"/>
+        <text class="er-cardinality" x="428" y="420">1:1</text>
+
+        <!-- === LANDING: review_queue === -->
+        <rect class="er-header" x="20" y="430" width="240" height="28" rx="6" ry="6"/>
+        <rect class="er-table" x="20" y="448" width="240" height="116" rx="0 0 6 6"/>
+        <text class="er-title" x="32" y="448">review_queue</text>
+        <text class="er-col" x="32" y="470"><tspan font-weight="700">id</tspan> <tspan class="er-col-muted">INT PK AUTO</tspan></text>
+        <text class="er-col" x="32" y="488">run_id <tspan class="er-col-muted">VARCHAR(36) IDX</tspan></text>
+        <text class="er-col" x="32" y="506">file <tspan class="er-col-muted">VARCHAR(50)</tspan></text>
+        <text class="er-col" x="32" y="524">record_key <tspan class="er-col-muted">VARCHAR(50) NULL</tspan></text>
+        <text class="er-col" x="32" y="542">payload <tspan class="er-col-muted">JSON</tspan></text>
+        <text class="er-col" x="32" y="560">reasons <tspan class="er-col-muted">JSON</tspan></text>
+
+        <!-- === LANDING: rejected_records === -->
+        <rect class="er-header" x="20" y="600" width="240" height="28" rx="6" ry="6"/>
+        <rect class="er-table" x="20" y="618" width="240" height="134" rx="0 0 6 6"/>
+        <text class="er-title" x="32" y="618">rejected_records</text>
+        <text class="er-col" x="32" y="640"><tspan font-weight="700">id</tspan> <tspan class="er-col-muted">INT PK AUTO</tspan></text>
+        <text class="er-col" x="32" y="658">run_id <tspan class="er-col-muted">VARCHAR(36) IDX</tspan></text>
+        <text class="er-col" x="32" y="676">file <tspan class="er-col-muted">VARCHAR(50)</tspan></text>
+        <text class="er-col" x="32" y="694">row_number <tspan class="er-col-muted">INT</tspan></text>
+        <text class="er-col" x="32" y="712">record_key <tspan class="er-col-muted">VARCHAR(50) NULL</tspan></text>
+        <text class="er-col" x="32" y="730">payload <tspan class="er-col-muted">JSON</tspan></text>
+        <text class="er-col" x="32" y="748">reasons <tspan class="er-col-muted">JSON</tspan></text>
+
+        <!-- ====== RETAIL SIDE ====== -->
+
+        <!-- === RETAIL: validation_rules === -->
+        <rect class="er-header-retail" x="610" y="38" width="240" height="28" rx="6" ry="6"/>
+        <rect class="er-table" x="610" y="56" width="240" height="152" rx="0 0 6 6"/>
+        <text class="er-title" x="622" y="58">validation_rules</text>
+        <text class="er-col" x="622" y="80"><tspan font-weight="700">rule_id</tspan> <tspan class="er-col-muted">VARCHAR(10) PK</tspan></text>
+        <text class="er-col" x="622" y="98">applies_to_file <tspan class="er-col-muted">VARCHAR(50)</tspan></text>
+        <text class="er-col" x="622" y="116">field_name <tspan class="er-col-muted">VARCHAR(50) NULL</tspan></text>
+        <text class="er-col" x="622" y="134">rule_type <tspan class="er-col-muted">VARCHAR(30)</tspan></text>
+        <text class="er-col" x="622" y="152">condition_text <tspan class="er-col-muted">TEXT</tspan></text>
+        <text class="er-col" x="622" y="170">failure_route <tspan class="er-col-muted">VARCHAR(20) CHK</tspan></text>
+        <text class="er-col" x="622" y="188">enabled <tspan class="er-col-muted">BOOLEAN</tspan></text>
+
+        <!-- === RETAIL: orders === -->
+        <rect class="er-header-retail" x="610" y="240" width="240" height="28" rx="6" ry="6"/>
+        <rect class="er-table" x="610" y="258" width="240" height="116" rx="0 0 6 6"/>
+        <text class="er-title" x="622" y="258">orders</text>
+        <text class="er-badge" x="672" y="258">20,000 rows</text>
+        <text class="er-col" x="622" y="280"><tspan font-weight="700">order_id</tspan> <tspan class="er-col-muted">VARCHAR(12) PK</tspan></text>
+        <text class="er-col" x="622" y="298">product <tspan class="er-col-muted">VARCHAR(100)</tspan></text>
+        <text class="er-col" x="622" y="316">order_date <tspan class="er-col-muted">DATE</tspan></text>
+        <text class="er-col" x="622" y="334">delivery_date <tspan class="er-col-muted">DATE NULL CHK</tspan></text>
+        <text class="er-col" x="622" y="352">payment_status <tspan class="er-col-muted">VARCHAR(20) CHK</tspan></text>
+        <text class="er-col" x="622" y="370">extract_generated_at <tspan class="er-col-muted">DATETIME</tspan></text>
+
+        <!-- === RETAIL: support_cases === -->
+        <rect class="er-header-retail" x="880" y="240" width="240" height="28" rx="6" ry="6"/>
+        <rect class="er-table" x="880" y="258" width="240" height="134" rx="0 0 6 6"/>
+        <text class="er-title" x="892" y="258">support_cases</text>
+        <text class="er-badge" x="982" y="258">25,000 rows</text>
+        <text class="er-col" x="892" y="280"><tspan font-weight="700">case_id</tspan> <tspan class="er-col-muted">VARCHAR(12) PK</tspan></text>
+        <text class="er-col" x="892" y="298">order_id <tspan class="er-col-muted">VARCHAR(12) FK NULL</tspan></text>
+        <text class="er-col" x="892" y="316">received_at <tspan class="er-col-muted">DATETIME</tspan></text>
+        <text class="er-col" x="892" y="334">customer_question <tspan class="er-col-muted">TEXT</tspan></text>
+        <text class="er-col" x="892" y="352">case_type <tspan class="er-col-muted">VARCHAR(20) CHK</tspan></text>
+        <text class="er-col" x="892" y="370">review_status <tspan class="er-col-muted">VARCHAR(20) CHK</tspan></text>
+        <text class="er-col" x="892" y="388">extract_generated_at <tspan class="er-col-muted">DATETIME</tspan></text>
+        <!-- FK: cases.order_id → orders.order_id -->
+        <path class="er-edge er-edge-fk" d="M880 298H850" marker-end="url(#erd-arrow)"/>
+        <text class="er-cardinality" x="858" y="292">n:1</text>
+
+        <!-- === RETAIL: issue_records === -->
+        <rect class="er-header-retail" x="880" y="430" width="240" height="28" rx="6" ry="6"/>
+        <rect class="er-table" x="880" y="448" width="240" height="116" rx="0 0 6 6"/>
+        <text class="er-title" x="892" y="448">issue_records</text>
+        <text class="er-badge" x="975" y="448">25,000 rows</text>
+        <text class="er-col" x="892" y="470"><tspan font-weight="700">case_id</tspan> <tspan class="er-col-muted">VARCHAR(12) PK FK</tspan></text>
+        <text class="er-col" x="892" y="488">issue_type <tspan class="er-col-muted">VARCHAR(30)</tspan></text>
+        <text class="er-col" x="892" y="506">issue_details <tspan class="er-col-muted">TEXT</tspan></text>
+        <text class="er-col" x="892" y="524">reported_delivery_date <tspan class="er-col-muted">DATE NULL</tspan></text>
+        <text class="er-col" x="892" y="542">evidence_status <tspan class="er-col-muted">VARCHAR(20) CHK</tspan></text>
+        <text class="er-col" x="892" y="560">extract_generated_at <tspan class="er-col-muted">DATETIME</tspan></text>
+        <!-- FK: issues.case_id → cases.case_id -->
+        <path class="er-edge er-edge-fk" d="M1000 430V392" marker-end="url(#erd-arrow)"/>
+        <text class="er-cardinality" x="1008" y="418">1:1</text>
+
+        <!-- === RETAIL: human_reviews === -->
+        <rect class="er-header-retail" x="610" y="430" width="240" height="28" rx="6" ry="6"/>
+        <rect class="er-table" x="610" y="448" width="240" height="170" rx="0 0 6 6"/>
+        <text class="er-title" x="622" y="448">human_reviews</text>
+        <text class="er-badge" x="718" y="448">10,000 rows</text>
+        <text class="er-col" x="622" y="470"><tspan font-weight="700">review_id</tspan> <tspan class="er-col-muted">VARCHAR(14) PK</tspan></text>
+        <text class="er-col" x="622" y="488">case_id <tspan class="er-col-muted">VARCHAR(12) FK</tspan></text>
+        <text class="er-col" x="622" y="506">triggered_rule_id <tspan class="er-col-muted">VARCHAR(10) FK NULL</tspan></text>
+        <text class="er-col" x="622" y="524">reviewer_role <tspan class="er-col-muted">VARCHAR(50)</tspan></text>
+        <text class="er-col" x="622" y="542">decision <tspan class="er-col-muted">VARCHAR(30) CHK</tspan></text>
+        <text class="er-col" x="622" y="560">decision_reason <tspan class="er-col-muted">TEXT</tspan></text>
+        <text class="er-col" x="622" y="578">reviewed_at <tspan class="er-col-muted">DATETIME</tspan></text>
+        <text class="er-col" x="622" y="596">handling_minutes <tspan class="er-col-muted">SMALLINT NULL CHK</tspan></text>
+        <text class="er-col" x="622" y="614">extract_generated_at <tspan class="er-col-muted">DATETIME</tspan></text>
+        <!-- FK: reviews.case_id → cases.case_id -->
+        <path class="er-edge er-edge-fk" d="M850 488H880V370" marker-end="url(#erd-arrow)"/>
+        <text class="er-cardinality" x="858" y="484">n:1</text>
+        <!-- FK: reviews.triggered_rule_id → validation_rules.rule_id -->
+        <path class="er-edge er-edge-fk" d="M730 448V208" marker-end="url(#erd-arrow)"/>
+      </svg>
+    </div>
+    <figcaption>Left: <code>meridian_landing</code> (7 tables, written by the pipeline). Right: <code>meridian_retail</code> (5 tables, seeded from course SQL, read-only). Solid arrows are enforced foreign keys. Dashed lines are logical relationships without a database constraint.</figcaption>
+  </figure>
+
+  <h2>How 3 files become 7 tables</h2>
+  <div class="prose">
+    <p>The pipeline reads 3 CSV files and routes each row by its worst validation finding. The 7 landing tables are the output:</p>
+  </div>
+  <figure>
+    <div class="diagram">
+      <svg viewBox="0 0 960 340" role="img" aria-label="Data flow from 3 input CSVs through the pipeline into 7 landing tables">
+        <defs>
+          <marker id="df" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--accent)"/></marker>
+        </defs>
+
+        <!-- Input files -->
+        <rect class="er-header" x="10" y="50" width="160" height="28" rx="6"/>
+        <text class="er-title" x="22" y="70">orders.csv</text>
+        <rect class="er-header" x="10" y="100" width="160" height="28" rx="6"/>
+        <text class="er-title" x="22" y="120">support_cases.csv</text>
+        <rect class="er-header" x="10" y="150" width="160" height="28" rx="6"/>
+        <text class="er-title" x="22" y="170">issue_records.csv</text>
+
+        <!-- Pipeline box -->
+        <rect class="er-header" x="220" y="40" width="180" height="155" rx="8"/>
+        <text class="er-title" x="232" y="68">Pipeline</text>
+        <text class="er-col" x="232" y="90">1. Check schema (VR-007)</text>
+        <text class="er-col" x="232" y="108">2. Parse rows</text>
+        <text class="er-col" x="232" y="126">3. Run rules per row</text>
+        <text class="er-col" x="232" y="144">4. Cascade bundles</text>
+        <text class="er-col" x="232" y="162">5. Check freshness</text>
+        <text class="er-col" x="232" y="180">6. Check duplicates</text>
+
+        <!-- Arrows in -->
+        <path class="er-edge er-edge-fk" d="M170 64H218" marker-end="url(#df)"/>
+        <path class="er-edge er-edge-fk" d="M170 114H218" marker-end="url(#df)"/>
+        <path class="er-edge er-edge-fk" d="M170 164H218" marker-end="url(#df)"/>
+
+        <!-- Route labels -->
+        <text class="er-title" x="440" y="50" style="font-size:11px;fill:var(--muted)">ROUTE</text>
+
+        <!-- Output tables -->
+        <rect class="er-header" x="440" y="60" width="200" height="26" rx="5"/>
+        <text class="er-col" x="452" y="79" style="font-weight:700">PUBLISH</text>
+
+        <rect class="er-header" x="680" y="50" width="140" height="26" rx="5"/>
+        <text class="er-col" x="692" y="69" style="font-weight:600">stg_orders</text>
+        <rect class="er-header" x="680" y="80" width="140" height="26" rx="5"/>
+        <text class="er-col" x="692" y="99" style="font-weight:600">stg_support_cases</text>
+        <rect class="er-header" x="680" y="110" width="140" height="26" rx="5"/>
+        <text class="er-col" x="692" y="129" style="font-weight:600">stg_issue_records</text>
+
+        <path class="er-edge er-edge-fk" d="M640 73H678" marker-end="url(#df)"/>
+        <path class="er-edge er-edge-fk" d="M640 80V93H678" marker-end="url(#df)"/>
+        <path class="er-edge er-edge-fk" d="M640 80V123H678" marker-end="url(#df)"/>
+
+        <rect class="er-header" x="440" y="110" width="200" height="26" rx="5" style="fill:var(--warn-soft);stroke:var(--warn)"/>
+        <text class="er-col" x="452" y="129" style="font-weight:700">HUMAN_REVIEW</text>
+        <rect class="er-header" x="680" y="160" width="140" height="26" rx="5" style="fill:var(--warn-soft);stroke:var(--warn)"/>
+        <text class="er-col" x="692" y="179" style="font-weight:600">review_queue</text>
+        <path class="er-edge" d="M640 123H660V173H678" marker-end="url(#df)" style="stroke:var(--warn);stroke-width:1.6"/>
+
+        <rect class="er-header" x="440" y="160" width="200" height="26" rx="5" style="fill:#f5e0e0;stroke:#b44"/>
+        <text class="er-col" x="452" y="179" style="font-weight:700;fill:#922">REJECT</text>
+        <rect class="er-header" x="680" y="210" width="140" height="26" rx="5" style="fill:#f5e0e0;stroke:#b44"/>
+        <text class="er-col" x="692" y="229" style="font-weight:600">rejected_records</text>
+        <path class="er-edge" d="M640 173H660V223H678" marker-end="url(#df)" style="stroke:#b44;stroke-width:1.6"/>
+
+        <!-- Audit tables -->
+        <rect class="er-header" x="440" y="220" width="200" height="26" rx="5" style="fill:var(--surface-2);stroke:var(--line)"/>
+        <text class="er-col" x="452" y="239" style="font-weight:700">EVERY RUN</text>
+        <rect class="er-header" x="680" y="260" width="140" height="26" rx="5" style="fill:var(--surface-2);stroke:var(--line)"/>
+        <text class="er-col" x="692" y="279" style="font-weight:600">ingest_runs</text>
+        <rect class="er-header" x="680" y="290" width="140" height="26" rx="5" style="fill:var(--surface-2);stroke:var(--line)"/>
+        <text class="er-col" x="692" y="309" style="font-weight:600">ingest_findings</text>
+        <path class="er-edge" d="M640 233H660V273H678" marker-end="url(#df)" style="stroke:var(--muted);stroke-width:1.6"/>
+        <path class="er-edge" d="M660 273V303H678" marker-end="url(#df)" style="stroke:var(--muted);stroke-width:1.6"/>
+
+        <!-- Pipeline out -->
+        <path class="er-edge er-edge-fk" d="M400 73H438" marker-end="url(#df)"/>
+        <path class="er-edge er-edge-fk" d="M400 117V123H438" marker-end="url(#df)"/>
+        <path class="er-edge er-edge-fk" d="M400 150V173H438" marker-end="url(#df)"/>
+        <path class="er-edge" d="M400 170V233H438" marker-end="url(#df)" style="stroke:var(--muted);stroke-width:1.6"/>
+      </svg>
+    </div>
+    <figcaption>Every run writes to <code>ingest_runs</code> + <code>ingest_findings</code> regardless of outcome. Row data goes to exactly one of the three destinations based on its route.</figcaption>
+  </figure>
+
+  <h2>Table reference: <code>meridian_landing</code></h2>
+  <p class="prose">These 7 tables are defined in <a href="../src/meridian/ingest/store.py"><code>store.py</code></a> using SQLAlchemy Core. They are created by <code>metadata.create_all()</code> on every <code>meridian ingest</code> run (idempotent).</p>
+
+  <div class="col-spec">
+    <h3><code>ingest_runs</code> <span class="badge badge-pk">audit</span></h3>
+    <p>One row per <code>meridian ingest</code> invocation. The <code>summary</code> JSON stores the same object printed to the terminal.</p>
+    <div class="col-grid">
+      <span>run_id</span><span>VARCHAR(36)</span><span><span class="badge badge-pk">PK</span> UUID v4, generated in Python</span>
+      <span>source</span><span>VARCHAR(500)</span><span>Where the delivery came from, e.g. <code>s3://meridian-landing/2026-09-18</code></span>
+      <span>content_hash</span><span>VARCHAR(64)</span><span><span class="badge badge-idx">IDX</span> SHA-256 of all file contents. Used by VR-009 to detect duplicate publishes</span>
+      <span>status</span><span>VARCHAR(20)</span><span><code>PUBLISHED</code>, <code>PAUSED</code> or <code>DUPLICATE</code></span>
+      <span>run_at</span><span>DATETIME</span><span>The fixed "now" from <code>MERIDIAN_RUN_AT</code>, stored as naive UTC</span>
+      <span>finished_at</span><span>DATETIME</span><span>Real wall clock time when the run completed</span>
+      <span>summary</span><span>JSON</span><span><span class="badge badge-json">JSON</span> <code>{"status": "PUBLISHED", "files": {"orders.csv": {"PUBLISH": 8, ...}}, "warnings": [...]}</code></span>
+    </div>
+
+    <h3><code>ingest_findings</code> <span class="badge badge-pk">audit</span></h3>
+    <p>One row per problem found on any row or file, including file-level warnings (VR-008) and schema failures (VR-007). Joined to <code>ingest_runs</code> via <code>run_id</code>.</p>
+    <div class="col-grid">
+      <span>id</span><span>INT</span><span><span class="badge badge-pk">PK</span> Auto-increment</span>
+      <span>run_id</span><span>VARCHAR(36)</span><span><span class="badge badge-fk">FK</span> <span class="badge badge-idx">IDX</span> → <code>ingest_runs.run_id</code></span>
+      <span>file</span><span>VARCHAR(50)</span><span>Which CSV: <code>orders.csv</code>, <code>support_cases.csv</code> or <code>issue_records.csv</code></span>
+      <span>row_number</span><span>INT NULL</span><span>1-based data row (header excluded). NULL for file-level findings</span>
+      <span>record_key</span><span>VARCHAR(50) NULL</span><span>The row's primary key value (<code>order_id</code> or <code>case_id</code>). NULL if blank</span>
+      <span>rule_id</span><span>VARCHAR(10)</span><span><code>VR-001</code> through <code>VR-009</code>, or <code>BUNDLE</code> for cascade rejections</span>
+      <span>route</span><span>VARCHAR(20)</span><span><code>REJECT</code>, <code>HUMAN_REVIEW</code>, <code>PAUSE_LOAD</code> or <code>LOAD_WARNING</code></span>
+      <span>message</span><span>TEXT</span><span>Human-readable explanation, e.g. "delivery_date '17-09-2026' is not YYYY-MM-DD"</span>
+    </div>
+
+    <h3><code>stg_orders</code> <span class="badge" style="background:var(--accent);color:var(--surface)">staging</span></h3>
+    <p>Orders that passed all rules. A re-delivered <code>order_id</code> replaces (delete + insert) the earlier row, not duplicates it.</p>
+    <div class="col-grid">
+      <span>order_id</span><span>VARCHAR(12)</span><span><span class="badge badge-pk">PK</span> e.g. <code>MR-501</code></span>
+      <span>product</span><span>VARCHAR(100)</span><span>Product name</span>
+      <span>order_date</span><span>DATE</span><span>When the order was placed</span>
+      <span>delivery_date</span><span>DATE NULL</span><span>When it was delivered (NULL if not yet)</span>
+      <span>payment_status</span><span>VARCHAR(20)</span><span><code>PAID</code>, <code>PENDING</code>, <code>FAILED</code> or <code>REFUNDED</code></span>
+      <span>extract_generated_at</span><span>DATETIME</span><span>When the source system generated this extract</span>
+      <span>run_id</span><span>VARCHAR(36)</span><span>Which ingestion run published this row</span>
+    </div>
+
+    <h3><code>stg_support_cases</code> <span class="badge" style="background:var(--accent);color:var(--surface)">staging</span></h3>
+    <div class="col-grid">
+      <span>case_id</span><span>VARCHAR(12)</span><span><span class="badge badge-pk">PK</span> e.g. <code>MCS-501</code></span>
+      <span>order_id</span><span>VARCHAR(12) NULL</span><span>Linked order. NULL for GENERAL/BILLING cases without an order</span>
+      <span>received_at</span><span>DATETIME</span><span>When the support request came in</span>
+      <span>customer_question</span><span>TEXT</span><span>The customer's message</span>
+      <span>case_type</span><span>VARCHAR(20)</span><span><code>RETURN</code> | <code>DAMAGE</code> | <code>DELIVERY</code> | <code>BILLING</code> | <code>GENERAL</code></span>
+      <span>review_status</span><span>VARCHAR(20)</span><span><code>PENDING</code> | <code>APPROVED</code> | <code>REJECTED</code></span>
+      <span>extract_generated_at</span><span>DATETIME</span><span>Source system extract time</span>
+      <span>run_id</span><span>VARCHAR(36)</span><span>Ingestion run that published this row</span>
+    </div>
+
+    <h3><code>stg_issue_records</code> <span class="badge" style="background:var(--accent);color:var(--surface)">staging</span></h3>
+    <div class="col-grid">
+      <span>case_id</span><span>VARCHAR(12)</span><span><span class="badge badge-pk">PK</span> 1:1 with the case it belongs to</span>
+      <span>issue_type</span><span>VARCHAR(30)</span><span>e.g. <code>RETURN_WINDOW</code>, <code>DAMAGED_ITEM</code></span>
+      <span>issue_details</span><span>TEXT</span><span>Detailed description of the issue</span>
+      <span>reported_delivery_date</span><span>DATE NULL</span><span>Date the customer says the item was delivered</span>
+      <span>evidence_status</span><span>VARCHAR(20)</span><span><code>VERIFIED</code> | <code>PENDING_PROOF</code> | <code>NOT_REQUIRED</code> | <code>PHOTO_ATTACHED</code></span>
+      <span>extract_generated_at</span><span>DATETIME</span><span>Source system extract time</span>
+      <span>run_id</span><span>VARCHAR(36)</span><span>Ingestion run that published this row</span>
+    </div>
+
+    <h3><code>review_queue</code> <span class="badge badge-fk" style="background:var(--warn)">review</span></h3>
+    <p>Rows routed to <code>HUMAN_REVIEW</code>. The full row data is stored as JSON in <code>payload</code> so the reviewer sees exactly what the pipeline saw. Today these accumulate; the API (Phase 2) will add claim/decide endpoints.</p>
+    <div class="col-grid">
+      <span>id</span><span>INT</span><span><span class="badge badge-pk">PK</span> Auto-increment</span>
+      <span>run_id</span><span>VARCHAR(36)</span><span><span class="badge badge-idx">IDX</span> Which run produced this review item</span>
+      <span>file</span><span>VARCHAR(50)</span><span>Which CSV the row came from</span>
+      <span>record_key</span><span>VARCHAR(50) NULL</span><span>The row's key (<code>case_id</code>)</span>
+      <span>payload</span><span>JSON</span><span><span class="badge badge-json">JSON</span> The complete row as it appeared in the CSV</span>
+      <span>reasons</span><span>JSON</span><span><span class="badge badge-json">JSON</span> Array of <code>[{"rule_id": "VR-006", "route": "HUMAN_REVIEW", "message": "..."}]</code></span>
+      <span>status</span><span>VARCHAR(20)</span><span>Default <code>OPEN</code>. Future: <code>CLAIMED</code>, <code>DECIDED</code></span>
+    </div>
+
+    <h3><code>rejected_records</code> <span class="badge" style="background:#b44;color:#fff">rejected</span></h3>
+    <p>Rows routed to <code>REJECT</code>. Kept with their reasons so you can diagnose data quality issues upstream.</p>
+    <div class="col-grid">
+      <span>id</span><span>INT</span><span><span class="badge badge-pk">PK</span> Auto-increment</span>
+      <span>run_id</span><span>VARCHAR(36)</span><span><span class="badge badge-idx">IDX</span> Which run produced this rejection</span>
+      <span>file</span><span>VARCHAR(50)</span><span>Which CSV the row came from</span>
+      <span>row_number</span><span>INT</span><span>1-based position in the CSV (header excluded)</span>
+      <span>record_key</span><span>VARCHAR(50) NULL</span><span>The row's key. NULL when the key itself is blank (VR-001)</span>
+      <span>payload</span><span>JSON</span><span><span class="badge badge-json">JSON</span> The complete row as it appeared in the CSV</span>
+      <span>reasons</span><span>JSON</span><span><span class="badge badge-json">JSON</span> Array of all findings, e.g. <code>[{"rule_id": "VR-005", ...}]</code></span>
+    </div>
+  </div>
+
+  <h2>Table reference: <code>meridian_retail</code></h2>
+  <p class="prose">These 5 tables are created and seeded by the SQL scripts in <a href="../db/mysql/init/"><code>db/mysql/init/</code></a> on first MySQL start. The app user has <strong>SELECT only</strong> (least privilege). Schema defined in <a href="../db/mysql/init/00_base_schema.sql"><code>00_base_schema.sql</code></a>.</p>
+
+  <div class="col-spec">
+    <h3><code>orders</code> <span class="badge badge-chk">20,000 rows</span></h3>
+    <div class="col-grid">
+      <span>order_id</span><span>VARCHAR(12)</span><span><span class="badge badge-pk">PK</span></span>
+      <span>product</span><span>VARCHAR(100)</span><span></span>
+      <span>order_date</span><span>DATE</span><span></span>
+      <span>delivery_date</span><span>DATE NULL</span><span><span class="badge badge-chk">CHK</span> <code>delivery_date IS NULL OR delivery_date >= order_date</code></span>
+      <span>payment_status</span><span>VARCHAR(20)</span><span><span class="badge badge-chk">CHK</span> <code>IN ('PAID','PENDING','FAILED','REFUNDED')</code></span>
+      <span>extract_generated_at</span><span>DATETIME</span><span></span>
+    </div>
+
+    <h3><code>support_cases</code> <span class="badge badge-chk">25,000 rows</span></h3>
+    <div class="col-grid">
+      <span>case_id</span><span>VARCHAR(12)</span><span><span class="badge badge-pk">PK</span></span>
+      <span>order_id</span><span>VARCHAR(12) NULL</span><span><span class="badge badge-fk">FK</span> → <code>orders.order_id</code> (CASCADE / RESTRICT)</span>
+      <span>received_at</span><span>DATETIME</span><span></span>
+      <span>customer_question</span><span>TEXT</span><span></span>
+      <span>case_type</span><span>VARCHAR(20)</span><span><span class="badge badge-chk">CHK</span> <code>IN ('RETURN','DAMAGE','DELIVERY','BILLING','GENERAL')</code></span>
+      <span>review_status</span><span>VARCHAR(20)</span><span><span class="badge badge-chk">CHK</span> <code>IN ('PENDING','APPROVED','REJECTED')</code></span>
+      <span>extract_generated_at</span><span>DATETIME</span><span></span>
+    </div>
+
+    <h3><code>issue_records</code> <span class="badge badge-chk">25,000 rows</span></h3>
+    <div class="col-grid">
+      <span>case_id</span><span>VARCHAR(12)</span><span><span class="badge badge-pk">PK</span> <span class="badge badge-fk">FK</span> → <code>support_cases.case_id</code></span>
+      <span>issue_type</span><span>VARCHAR(30)</span><span></span>
+      <span>issue_details</span><span>TEXT</span><span></span>
+      <span>reported_delivery_date</span><span>DATE NULL</span><span></span>
+      <span>evidence_status</span><span>VARCHAR(20)</span><span><span class="badge badge-chk">CHK</span> <code>IN ('VERIFIED','PENDING_PROOF','NOT_REQUIRED','CONFLICTING')</code></span>
+      <span>extract_generated_at</span><span>DATETIME</span><span></span>
+    </div>
+
+    <h3><code>human_reviews</code> <span class="badge badge-chk">10,000 rows</span></h3>
+    <div class="col-grid">
+      <span>review_id</span><span>VARCHAR(14)</span><span><span class="badge badge-pk">PK</span></span>
+      <span>case_id</span><span>VARCHAR(12)</span><span><span class="badge badge-fk">FK</span> → <code>support_cases.case_id</code></span>
+      <span>triggered_rule_id</span><span>VARCHAR(10) NULL</span><span><span class="badge badge-fk">FK</span> → <code>validation_rules.rule_id</code></span>
+      <span>reviewer_role</span><span>VARCHAR(50)</span><span></span>
+      <span>decision</span><span>VARCHAR(30)</span><span><span class="badge badge-chk">CHK</span> <code>IN ('APPROVED','REJECTED','NEEDS_INFO','ESCALATED')</code></span>
+      <span>decision_reason</span><span>TEXT</span><span></span>
+      <span>reviewed_at</span><span>DATETIME</span><span></span>
+      <span>handling_minutes</span><span>SMALLINT NULL</span><span><span class="badge badge-chk">CHK</span> <code>BETWEEN 1 AND 1440</code></span>
+      <span>extract_generated_at</span><span>DATETIME</span><span></span>
+    </div>
+
+    <h3><code>validation_rules</code> <span class="badge badge-chk">9 rows</span></h3>
+    <div class="col-grid">
+      <span>rule_id</span><span>VARCHAR(10)</span><span><span class="badge badge-pk">PK</span> <code>VR-001</code> through <code>VR-009</code></span>
+      <span>applies_to_file</span><span>VARCHAR(50)</span><span>Which CSV this rule checks</span>
+      <span>field_name</span><span>VARCHAR(50) NULL</span><span>Which column, if applicable</span>
+      <span>rule_type</span><span>VARCHAR(30)</span><span>Category of validation</span>
+      <span>condition_text</span><span>TEXT</span><span>Human-readable description of the check</span>
+      <span>failure_route</span><span>VARCHAR(20)</span><span><span class="badge badge-chk">CHK</span> <code>IN ('REJECT','HUMAN_REVIEW','PAUSE_LOAD','LOAD_WARNING')</code></span>
+      <span>reason</span><span>TEXT</span><span>Why this rule exists</span>
+      <span>enabled</span><span>BOOLEAN</span><span>Default <code>TRUE</code></span>
+    </div>
+  </div>
+
+  <h2>Key design decisions</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Decision</th><th>What we chose</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Staging tables mirror CSV structure</td><td>One stg_* table per CSV file</td><td>No transformation yet: staging is a clean copy of what passed. Transformation happens later when rows promote to <code>meridian_retail</code></td></tr>
+      <tr><td>Rejected rows store the full payload as JSON</td><td><code>payload JSON</code> + <code>reasons JSON</code></td><td>The original data is preserved exactly, even if the schema changes. No data is lost on rejection</td></tr>
+      <tr><td>Review queue stores the full payload too</td><td>Same pattern as rejected_records</td><td>The reviewer needs to see the exact data the pipeline saw, not a foreign-key reference that might change</td></tr>
+      <tr><td>No foreign keys in landing tables</td><td>Logical relationships only (dashed lines in the ER diagram)</td><td>The pipeline handles referential integrity in Python (bundle cascades). DB-level FKs would complicate upserts and reject partial deliveries</td></tr>
+      <tr><td>Retail tables have full constraints</td><td>FKs, CHECK constraints, InnoDB</td><td>This is the trusted system of record. The database enforces correctness as a second line of defence</td></tr>
+      <tr><td>One transaction per run</td><td><code>engine.begin()</code> wraps all inserts</td><td>Either the entire run lands or nothing does. No partial state to clean up</td></tr>
+      <tr><td>Upsert by delete + insert</td><td><code>DELETE WHERE key IN (...)</code> then <code>INSERT</code></td><td>A re-delivered key replaces the old row. Works identically on MySQL and SQLite (used in unit tests)</td></tr>
+      <tr><td>Timestamps stored as naive UTC</td><td><code>DATETIME</code>, not <code>TIMESTAMP</code></td><td>MySQL <code>TIMESTAMP</code> has timezone conversion. Naive UTC is simpler and portable to SQLite in tests</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Useful queries</h2>
+  <details>
+    <summary>Count rows by route for a specific run</summary>
+    <pre class="cmd">SELECT
+    f.file,
+    f.route,
+    COUNT(*) AS cnt
+FROM ingest_findings f
+JOIN ingest_runs r ON r.run_id = f.run_id
+WHERE r.status = 'PUBLISHED'
+GROUP BY f.file, f.route
+ORDER BY f.file, f.route;</pre>
+  </details>
+  <details>
+    <summary>Find all rejected rows and why</summary>
+    <pre class="cmd">SELECT
+    record_key,
+    file,
+    JSON_EXTRACT(reasons, '$[0].rule_id') AS rule,
+    JSON_EXTRACT(reasons, '$[0].message') AS reason
+FROM rejected_records
+ORDER BY id DESC
+LIMIT 20;</pre>
+  </details>
+  <details>
+    <summary>List open review items with the conflicting dates</summary>
+    <pre class="cmd">SELECT
+    record_key,
+    file,
+    JSON_EXTRACT(reasons, '$[0].message') AS conflict,
+    status
+FROM review_queue
+WHERE status = 'OPEN'
+ORDER BY id;</pre>
+  </details>
+  <details>
+    <summary>Check if a delivery was already published (VR-009)</summary>
+    <pre class="cmd">SELECT run_id, status, source, finished_at
+FROM ingest_runs
+WHERE content_hash = (
+    SELECT content_hash FROM ingest_runs
+    WHERE run_id = '&lt;your-run-id&gt;'
+)
+ORDER BY finished_at;</pre>
+  </details>
+  <details>
+    <summary>Join staged orders with the trusted database</summary>
+    <pre class="cmd">-- Compare staged (landing) orders with trusted (retail) orders
+SELECT
+    s.order_id,
+    s.product AS staged_product,
+    r.product AS trusted_product,
+    s.delivery_date AS staged_date,
+    r.delivery_date AS trusted_date
+FROM meridian_landing.stg_orders s
+LEFT JOIN meridian_retail.orders r USING (order_id)
+LIMIT 10;</pre>
+  </details>
+  <details>
+    <summary>Rejection rate by rule across all runs</summary>
+    <pre class="cmd">SELECT
+    rule_id,
+    route,
+    COUNT(*) AS findings,
+    COUNT(DISTINCT run_id) AS runs_affected
+FROM ingest_findings
+WHERE route IN ('REJECT', 'HUMAN_REVIEW')
+GROUP BY rule_id, route
+ORDER BY findings DESC;</pre>
+  </details>
+
+  <h2>Access control</h2>
+  <div class="callout prose">
+    <p>The app user <code>meridian</code> has <strong>full access</strong> to <code>meridian_landing</code> (read + write) but only <strong>SELECT</strong> on <code>meridian_retail</code>. This is enforced by the grant in <a href="../db/mysql/init/10_landing_grants.sql"><code>10_landing_grants.sql</code></a>:</p>
+    <pre class="out">GRANT SELECT ON meridian_retail.* TO 'meridian'@'%';</pre>
+    <p>Attempting a write to <code>meridian_retail</code> fails with: <code>ERROR 1142: DELETE command denied to user 'meridian'</code></p>
+  </div>
+
+</section>
+
+<!-- ============================ TAB 4: SETUP & RUN ============================ -->
+<section role="tabpanel" id="setup" aria-labelledby="tab-setup" hidden>
+  <div class="prose">
+    <h2>Run Meridian on your Mac</h2>
+    <p>By the end you will have MySQL and a local S3 running in Docker, a sample delivery ingested, and the results in the database. Allow about 10 minutes, plus image downloads the first time.</p>
+    <p>Steps 1 to 11 and the "Try breaking it" experiment were run on this Mac on 2 November 2026, and the expected outputs are from that run. That test used a temporary copy of the project on other ports, so MariaDB kept running and the <code>brew services</code> commands were not run.</p>
+  </div>
+
+  <div class="progress">
+    <strong id="progress-text">0 of 11 steps done</strong>
+    <div class="bar"><span id="progress-bar"></span></div>
+    <button type="button" class="link-btn" id="progress-reset">Clear</button>
+  </div>
+
+  <article class="step" data-step="1">
+    <div class="step-head"><span class="step-num">1</span><h3>Check your tools</h3></div>
+    <p>You need Docker Desktop (or OrbStack) running, and <a href="https://docs.astral.sh/uv/">uv</a>. You don't need to install Python yourself, because uv fetches Python 3.12 for the project.</p>
+    <pre class="cmd">docker info --format '{{.ServerVersion}}'
+uv --version</pre>
+    <div class="code-label">Expected output (versions may be newer)</div>
+    <pre class="out">29.8.1
+uv 0.13.6 (Homebrew 2026-10-26 aarch64-apple-darwin)</pre>
+    <p>If uv is missing, run <code>brew install uv</code>. If <code>docker info</code> reports an error, open Docker Desktop and try again.</p>
+  </article>
+
+  <article class="step" data-step="2">
+    <div class="step-head"><span class="step-num">2</span><h3>Create your settings file</h3></div>
+    <p>The <code>.env</code> file holds local-only settings: database addresses, the Floci address and dummy AWS keys.</p>
+    <pre class="cmd">cd ~/Documents/my-projects/learning/scaler/meridian-platform
+cp .env.example .env</pre>
+  </article>
+
+  <article class="step" data-step="3">
+    <div class="step-head"><span class="step-num">3</span><h3>Free up port 3306</h3></div>
+    <div class="callout warn">
+      <p><strong>Required on this Mac.</strong> Homebrew MariaDB is using port 3306, which the project's MySQL container also needs. If you skip this step, <code>make up</code> fails with:</p>
+      <p><code>ports are not available: exposing port TCP 0.0.0.0:3306 ... bind: address already in use</code></p>
+    </div>
+    <p>Stop MariaDB while you work on Meridian. This doesn't delete its data.</p>
+    <pre class="cmd">brew services stop mariadb</pre>
+    <p>Then confirm nothing is using the port. This command should print nothing:</p>
+    <pre class="cmd">lsof -nP -iTCP:3306 -sTCP:LISTEN</pre>
+    <details>
+      <summary>Need MariaDB to keep running? Use port 3307 instead</summary>
+      <p>Make these two edits, and don't commit the first one, because CI expects 3306.</p>
+      <ol class="flow">
+        <li>In <code>docker-compose.yml</code>, change <code>"3306:3306"</code> to <code>"3307:3306"</code>.</li>
+        <li>In <code>.env</code>, change <code>127.0.0.1:3306</code> to <code>127.0.0.1:3307</code> in both <code>MERIDIAN_DB_URL</code> and <code>MERIDIAN_TRUSTED_DB_URL</code>.</li>
+      </ol>
+    </details>
+  </article>
+
+  <article class="step" data-step="4">
+    <div class="step-head"><span class="step-num">4</span><h3>Install the Python dependencies</h3></div>
+    <p>This creates a <code>.venv</code> folder using the exact versions in <code>uv.lock</code>.</p>
+    <pre class="cmd">make sync</pre>
+  </article>
+
+  <article class="step" data-step="5">
+    <div class="step-head"><span class="step-num">5</span><h3>Start the stack</h3></div>
+    <p>This starts MySQL, Floci and Adminer, then waits until they are ready. The first start also loads the course data into MySQL, which takes 30 to 60 seconds after the images download. It can wait up to 3 minutes per service before giving up.</p>
+    <pre class="cmd">make up</pre>
+    <div class="code-label">Expected last lines</div>
+    <pre class="out">floci: ready
+mysql: ready</pre>
+  </article>
+
+  <article class="step" data-step="6">
+    <div class="step-head"><span class="step-num">6</span><h3>Check the course data loaded</h3></div>
+    <pre class="cmd">make trusted-check</pre>
+    <div class="code-label">Expected output</div>
+    <pre class="out">orders            20,000
+support_cases     25,000
+issue_records     25,000
+human_reviews     10,000</pre>
+  </article>
+
+  <article class="step" data-step="7">
+    <div class="step-head"><span class="step-num">7</span><h3>Upload the sample delivery to S3</h3></div>
+    <p>This creates the bucket if needed, then copies the three CSVs from <code>data/landing/</code> into a dated folder.</p>
+    <pre class="cmd">make upload</pre>
+    <div class="code-label">Expected output</div>
+    <pre class="out">s3://meridian-landing/2026-09-18/issue_records.csv
+s3://meridian-landing/2026-09-18/orders.csv
+s3://meridian-landing/2026-09-18/support_cases.csv</pre>
+  </article>
+
+  <article class="step" data-step="8">
+    <div class="step-head"><span class="step-num">8</span><h3>Run the ingestion</h3></div>
+    <p>This is the main event: it validates every row and writes the results to MySQL.</p>
+    <pre class="cmd">make ingest</pre>
+    <div class="code-label">Expected output (your run_id will differ)</div>
+    <pre class="out">{
+  "run_id": "7400f908-8033-4105-8625-0dd73fcb484c",
+  "status": "PUBLISHED",
+  "files": {
+    "orders.csv": {
+      "PUBLISH": 8,
+      "HUMAN_REVIEW": 0,
+      "REJECT": 1
+    },
+    "support_cases.csv": {
+      "PUBLISH": 5,
+      "HUMAN_REVIEW": 1,
+      "REJECT": 6
+    },
+    "issue_records.csv": {
+      "PUBLISH": 5,
+      "HUMAN_REVIEW": 1,
+      "REJECT": 4
+    }
+  },
+  "warnings": []
+}</pre>
+    <p><code>PUBLISHED</code> means the run finished. It doesn't mean every row passed: 11 rows were rejected on purpose, because the sample data contains deliberate mistakes.</p>
+    <p>There's no freshness warning because the project fixes "now" at <code>2026-09-18T10:30</code> through <code>MERIDIAN_RUN_AT</code>, so the same files always give the same answer.</p>
+  </article>
+
+  <article class="step" data-step="9">
+    <div class="step-head"><span class="step-num">9</span><h3>Run it again to see the duplicate check</h3></div>
+    <pre class="cmd">make ingest</pre>
+    <div class="code-label">Expected change</div>
+    <pre class="out">"status": "DUPLICATE",</pre>
+    <p>The file contents have the same fingerprint as a run that already published, so nothing is written to the staging tables again. The attempt is still logged in the audit trail. The counts in the output look the same because the rules still ran.</p>
+  </article>
+
+  <article class="step" data-step="10">
+    <div class="step-head"><span class="step-num">10</span><h3>Look at the results</h3></div>
+    <p>List the runs:</p>
+    <pre class="cmd">uv run meridian runs</pre>
+    <div class="code-label">Expected output (newest first; your times and IDs will differ)</div>
+    <pre class="out">2026-11-02 17:34:25  DUPLICATE  648b414c-d725-4cf0-a44a-917b2fff7f1b  s3://meridian-landing/2026-09-18
+2026-11-02 17:34:25  PUBLISHED  7400f908-8033-4105-8625-0dd73fcb484c  s3://meridian-landing/2026-09-18</pre>
+    <p>See why rows were rejected. MySQL also prints a harmless warning about the password on the command line.</p>
+    <pre class="cmd">docker compose exec mysql mysql -umeridian -pmeridian -t meridian_landing -e "SELECT file, record_key, JSON_EXTRACT(reasons,'\$[0].rule_id') rule_id, JSON_EXTRACT(reasons,'\$[0].message') msg FROM rejected_records LIMIT 5;"</pre>
+    <div class="code-label">Expected output</div>
+    <pre class="out">+-------------------+------------+----------+--------------------------------------------------+
+| file              | record_key | rule_id  | msg                                              |
++-------------------+------------+----------+--------------------------------------------------+
+| orders.csv        | MR-503     | "VR-005" | "delivery_date '17-09-2026' is not YYYY-MM-DD"   |
+| support_cases.csv | MCS-503    | "VR-005" | "blocked: linked order MR-503 failed validation" |
+| support_cases.csv | MCS-504    | "VR-003" | "RETURN case has no order_id"                    |
+| support_cases.csv | MCS-505    | "VR-004" | "unknown review_status 'APPROVED_COMPLETE'"      |
+| support_cases.csv | MCS-510    | "VR-002" | "case_id MCS-510 appears 2 times"                |
++-------------------+------------+----------+--------------------------------------------------+</pre>
+    <p>You can also browse in these tools:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Tool</th><th>Address</th><th>Sign in with</th></tr></thead>
+      <tbody>
+        <tr><td>Adminer, a database browser</td><td><a href="http://localhost:8080">localhost:8080</a></td><td>Server <code>mysql</code>, username and password <code>meridian</code>, database <code>meridian_landing</code></td></tr>
+        <tr><td>Floci console, for S3</td><td><a href="http://localhost:4566/_floci/ui">localhost:4566/_floci/ui</a></td><td>No sign-in</td></tr>
+      </tbody>
+    </table></div>
+  </article>
+
+  <article class="step" data-step="11">
+    <div class="step-head"><span class="step-num">11</span><h3>Run the tests</h3></div>
+    <pre class="cmd">make test
+make test-integration
+make lint</pre>
+    <div class="code-label">Expected results</div>
+    <pre class="out">make test              12 passed, 2 deselected  (84% coverage)
+make test-integration   2 passed, 12 deselected
+make lint               All checks passed; no mypy issues</pre>
+    <p>The unit tests don't need Docker: they fake S3 and use SQLite. The integration tests use the real running stack.</p>
+  </article>
+
+  <h2>Try breaking it</h2>
+  <div class="prose">
+    <p>This is a good way to see rule VR-007 in action. Make a copy of the delivery with a required file missing, then ingest it:</p>
+  </div>
+  <div style="max-width:860px">
+    <pre class="cmd">mkdir -p /tmp/meridian-broken
+cp data/landing/*.csv /tmp/meridian-broken/
+rm /tmp/meridian-broken/orders.csv
+uv run meridian ingest --source /tmp/meridian-broken
+echo "exit code: $?"
+rm -rf /tmp/meridian-broken</pre>
+    <div class="code-label">Expected output (your run_id will differ)</div>
+    <pre class="out">{
+  "run_id": "01822115-6329-4f15-9c46-20d72fb90683",
+  "status": "PAUSED",
+  "files": {},
+  "warnings": []
+}
+exit code: 2</pre>
+  </div>
+  <p class="prose">Nothing is published. The reason, <code>missing file orders.csv</code>, is saved in the <code>ingest_findings</code> table.</p>
+
+  <h2>When you're finished</h2>
+  <div style="max-width:860px">
+    <pre class="cmd">make down                    # stops the containers; your data stays
+brew services start mariadb  # only if you stopped it in step 3</pre>
+  </div>
+  <p class="prose">Next time, run <code>brew services stop mariadb</code> and <code>make up</code>, and everything is as you left it.</p>
+
+  <h2>Command reference</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>make help</code></td><td>Lists all commands</td></tr>
+      <tr><td><code>make up</code> / <code>make down</code></td><td>Starts or stops the stack; data is kept</td></tr>
+      <tr><td><code>make reset</code></td><td><strong>Deletes all local data</strong>, then starts fresh and reloads the course data</td></tr>
+      <tr><td><code>make logs</code></td><td>Follows the logs from all containers</td></tr>
+      <tr><td><code>make upload</code></td><td>Uploads <code>data/landing/</code> to S3</td></tr>
+      <tr><td><code>make ingest</code></td><td>Ingests the delivery from S3</td></tr>
+      <tr><td><code>make ingest-local</code></td><td>Ingests straight from <code>data/landing/</code>, skipping S3</td></tr>
+      <tr><td><code>make test</code> / <code>make test-integration</code></td><td>Runs unit tests / tests against the running stack</td></tr>
+      <tr><td><code>make lint</code> / <code>make fmt</code></td><td>Checks code quality / fixes lint and formatting automatically</td></tr>
+      <tr><td><code>make ci</code></td><td>Runs lint and unit tests, matching CI's first job</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>If something goes wrong</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>What you see</th><th>Likely cause</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td><code>bind: address already in use</code></td><td>Another program is using that port. On this Mac, port 3306 is usually MariaDB.</td><td>Repeat step 3. For another port, find the program with <code>lsof -nP -iTCP:PORT -sTCP:LISTEN</code>, using the port number from the error.</td></tr>
+      <tr><td><code>Cannot connect to the Docker daemon</code></td><td>Docker isn't running</td><td>Open Docker Desktop, wait for it to finish starting, and try again.</td></tr>
+      <tr><td><code>mysql: not ready after 180s</code></td><td>MySQL failed to start or load the data</td><td>Check <code>docker compose logs mysql</code>, then try <code>make reset</code> (this deletes local data).</td></tr>
+      <tr><td>Connection refused during <code>make upload</code> or <code>make ingest</code></td><td>The stack isn't running</td><td>Run <code>make up</code>.</td></tr>
+      <tr><td>Status <code>DUPLICATE</code></td><td>This content was already published. This is correct behaviour.</td><td>Nothing to fix. To start over, run <code>make reset</code> (this deletes local data).</td></tr>
+      <tr><td>Your SQL file changes have no effect</td><td>Scripts in <code>db/mysql/init/</code> only run when the database volume is empty</td><td>Run <code>make reset</code> (this deletes local data).</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+</div>
+</main>
+
+<script>
+(function () {
+  // Tabs: the URL hash keeps your place on reload.
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+
+  function selectTab(id, focus) {
+    tabs.forEach(function (tab) {
+      var on = tab.getAttribute('aria-controls') === id;
+      tab.setAttribute('aria-selected', on);
+      tab.tabIndex = on ? 0 : -1;
+      document.getElementById(tab.getAttribute('aria-controls')).hidden = !on;
+      if (on && focus) tab.focus();
+    });
+  }
+
+  function validId(id) {
+    return tabs.some(function (t) { return t.getAttribute('aria-controls') === id; });
+  }
+
+  function go(id, focus) {
+    selectTab(id, focus);
+    history.replaceState(null, '', '#' + id);
+    window.scrollTo(0, 0);
+  }
+
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { go(tab.getAttribute('aria-controls')); });
+    tab.addEventListener('keydown', function (e) {
+      var next = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : null;
+      if (next === null) return;
+      e.preventDefault();
+      go(tabs[(next + tabs.length) % tabs.length].getAttribute('aria-controls'), true);
+    });
+  });
+
+  document.querySelectorAll('[data-goto]').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      go(link.getAttribute('data-goto'));
+    });
+  });
+
+  var initial = location.hash.slice(1);
+  if (validId(initial)) selectTab(initial);
+  window.addEventListener('hashchange', function () {
+    var id = location.hash.slice(1);
+    if (validId(id)) selectTab(id);
+  });
+
+  // Diagram view: full plan or built today.
+  var figure = document.getElementById('full-diagram');
+  var viewButtons = figure.querySelectorAll('.seg button');
+  viewButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      figure.setAttribute('data-view', button.getAttribute('data-view'));
+      viewButtons.forEach(function (b) { b.setAttribute('aria-pressed', b === button); });
+    });
+  });
+
+  // Copy buttons on commands.
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    var area = document.createElement('textarea');
+    area.value = text;
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand('copy');
+    area.remove();
+    return Promise.resolve();
+  }
+
+  document.querySelectorAll('pre.cmd').forEach(function (pre) {
+    var wrap = document.createElement('div');
+    wrap.className = 'code-block';
+    pre.parentNode.insertBefore(wrap, pre);
+    wrap.appendChild(pre);
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'copy';
+    button.textContent = 'Copy';
+    button.addEventListener('click', function () {
+      copyText(pre.textContent).then(function () {
+        button.textContent = 'Copied';
+        setTimeout(function () { button.textContent = 'Copy'; }, 1500);
+      });
+    });
+    wrap.appendChild(button);
+  });
+
+  // Step checklist, remembered in this browser.
+  var KEY = 'meridian-guide-steps';
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+
+  function render() {
+    var count = 0;
+    steps.forEach(function (step) {
+      var on = !!done[step.dataset.step];
+      step.classList.toggle('done', on);
+      step.querySelector('input').checked = on;
+      if (on) count++;
+    });
+    document.getElementById('progress-text').textContent = count + ' of ' + steps.length + ' steps done';
+    document.getElementById('progress-bar').style.width = (100 * count / steps.length) + '%';
+    try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {}
+  }
+
+  steps.forEach(function (step) {
+    var label = document.createElement('label');
+    label.className = 'done-toggle';
+    var box = document.createElement('input');
+    box.type = 'checkbox';
+    box.addEventListener('change', function () {
+      done[step.dataset.step] = box.checked;
+      render();
+    });
+    label.appendChild(box);
+    label.appendChild(document.createTextNode('Done'));
+    step.querySelector('.step-head').appendChild(label);
+  });
+
+  document.getElementById('progress-reset').addEventListener('click', function () {
+    done = {};
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
