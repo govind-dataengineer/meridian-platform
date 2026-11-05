@@ -23,7 +23,7 @@ dev = [
     "pytest-cov>=5",
     "ruff>=0.6",
     "mypy>=1.11",
-    "boto3-stubs[s3]>=1.35",
+    "boto3-stubs[s3]>=1.43.123",
     "moto[s3]>=5",
 ]
 
