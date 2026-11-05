@@ -851,7 +851,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "boto3-stubs", extras = ["s3"], specifier = ">=1.35" },
-    { name = "moto", extras = ["s3"], specifier = ">=5" },
+    { name = "moto", extras = ["s3"], specifier = ">=5.2.5" },
     { name = "mypy", specifier = ">=1.11" },
     { name = "pytest", specifier = ">=8" },
     { name = "pytest-cov", specifier = ">=5" },
