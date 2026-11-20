@@ -396,7 +396,7 @@
       </span>
     </div>
     <div class="diagram">
-      <svg viewBox="0 0 1200 905" role="img" aria-label="Layered architecture of the Meridian platform. People use a React dashboard that calls a FastAPI backend. An AI agent and RAG assistant use a model gateway. Redis, SQS and SNS, and Kafka support the backend. The built data layer takes CSV deliveries through S3 and the ingest job into MySQL. The phase table below this diagram lists every piece in text.">
+      <svg viewBox="0 0 1200 950" role="img" aria-label="Layered architecture of the Meridian platform. People use a Streamlit dashboard that calls a FastAPI backend. An AI agent and RAG assistant use a model gateway. Redis, SQS and SNS, and Kafka support the backend. The built data layer takes CSV deliveries through S3 and the ingest job into MySQL. The phase table below this diagram lists every piece in text.">
         <defs>
           <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--accent)"/></marker>
           <marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--muted)"/></marker>
@@ -408,7 +408,7 @@
         <rect class="lane" x="20" y="208" width="1160" height="196" rx="8"/>
         <rect class="lane" x="20" y="412" width="1160" height="96" rx="8"/>
         <rect class="lane" x="20" y="516" width="1160" height="216" rx="8"/>
-        <rect class="lane" x="20" y="740" width="1160" height="150" rx="8"/>
+        <rect class="lane" x="20" y="740" width="1160" height="192" rx="8"/>
         <text class="lane-label" x="32" y="38">PEOPLE</text>
         <text class="lane-label" x="32" y="130">APPS</text>
         <text class="lane-label" x="32" y="230">BACKEND &amp; AI</text>
@@ -441,7 +441,11 @@
           <text class="edge-label" x="884" y="460">search</text>
           <path class="edge" d="M1047 342V428" marker-end="url(#ap)"/>
           <path class="edge" d="M800 690H1092V648" marker-end="url(#ap)"/>
-          <text class="edge-label" x="950" y="682">reporting models</text>
+          <text class="edge-label" x="950" y="682">dbt models</text>
+          <path class="edge" d="M1092 566V194" marker-end="url(#ap)"/>
+          <text class="edge-label" x="1108" y="400">feeds views</text>
+          <path class="edge" d="M150 194V500V578H530" marker-end="url(#ap)"/>
+          <text class="edge-label" x="104" y="500">reads DB</text>
         </g>
 
         <!-- People -->
@@ -456,10 +460,11 @@
 
         <!-- Apps -->
         <g class="planned">
-          <rect class="box" x="130" y="124" width="420" height="60" rx="8"/>
-          <text class="t" x="340" y="148">Ops dashboard</text>
-          <text class="s" x="340" y="168">React + TypeScript: KPI tiles, review queue</text>
-          <text class="ph" x="542" y="140">P3</text>
+          <rect class="box" x="130" y="114" width="420" height="78" rx="8"/>
+          <text class="t" x="340" y="140">Streamlit dashboard</text>
+          <text class="s" x="340" y="158">Ops: review queue, KPI tiles, run history</text>
+          <text class="s" x="340" y="174">Analytics: rejection trends, rule heatmaps, data quality</text>
+          <text class="ph" x="542" y="130">P3</text>
 
           <rect class="box" x="620" y="124" width="240" height="60" rx="8"/>
           <text class="t" x="740" y="148">MCP clients</text>
@@ -558,15 +563,17 @@
           <text class="ph" x="992" y="580">P2</text>
 
           <rect class="box" x="1020" y="566" width="145" height="80" rx="8"/>
-          <text class="t" x="1092" y="600">dbt + DuckDB</text>
-          <text class="s" x="1092" y="622">Reporting</text>
-          <text class="ph" x="1157" y="580">P2</text>
+          <text class="t" x="1092" y="600">dbt models</text>
+          <text class="s" x="1092" y="622">SQL transforms for</text>
+          <text class="s" x="1092" y="638">Streamlit views</text>
+          <text class="ph" x="1157" y="580">P3</text>
         </g>
 
         <!-- Platform -->
         <text class="row-label" x="130" y="780">Build &amp; ship</text>
-        <text class="row-label" x="130" y="822">Test &amp; watch</text>
-        <text class="row-label" x="130" y="864">Protect</text>
+        <text class="row-label" x="130" y="822">Observability</text>
+        <text class="row-label" x="130" y="864">Test &amp; QA</text>
+        <text class="row-label" x="130" y="906">Protect</text>
 
         <g class="built">
           <rect class="box" x="250" y="760" width="139" height="30" rx="15"/>
@@ -592,25 +599,34 @@
           <rect class="box" x="941" y="760" width="83" height="30" rx="15"/>
           <text class="chip-text" x="982" y="780">ECR + EKS</text>
 
-          <rect class="box" x="485" y="802" width="174" height="30" rx="15"/>
-          <text class="chip-text" x="572" y="822">OpenTelemetry + Jaeger</text>
-          <rect class="box" x="669" y="802" width="111" height="30" rx="15"/>
-          <text class="chip-text" x="724" y="822">k6 load tests</text>
-          <rect class="box" x="790" y="802" width="111" height="30" rx="15"/>
-          <text class="chip-text" x="845" y="822">SLOs + alerts</text>
-          <rect class="box" x="911" y="802" width="97" height="30" rx="15"/>
-          <text class="chip-text" x="959" y="822">Chaos tests</text>
-          <rect class="box" x="1018" y="802" width="118" height="30" rx="15"/>
-          <text class="chip-text" x="1077" y="822">RAGAS + MLflow</text>
+          <rect class="box" x="485" y="802" width="118" height="30" rx="15"/>
+          <text class="chip-text" x="544" y="822">OpenTelemetry</text>
+          <rect class="box" x="611" y="802" width="74" height="30" rx="15"/>
+          <text class="chip-text" x="648" y="822">Grafana</text>
+          <rect class="box" x="693" y="802" width="92" height="30" rx="15"/>
+          <text class="chip-text" x="739" y="822">Prometheus</text>
+          <rect class="box" x="793" y="802" width="55" height="30" rx="15"/>
+          <text class="chip-text" x="820" y="822">Loki</text>
+          <rect class="box" x="856" y="802" width="69" height="30" rx="15"/>
+          <text class="chip-text" x="890" y="822">Tempo</text>
+          <rect class="box" x="933" y="802" width="97" height="30" rx="15"/>
+          <text class="chip-text" x="981" y="822">SLOs + alerts</text>
 
-          <rect class="box" x="441" y="844" width="125" height="30" rx="15"/>
-          <text class="chip-text" x="503" y="864">Secrets Manager</text>
-          <rect class="box" x="576" y="844" width="83" height="30" rx="15"/>
-          <text class="chip-text" x="617" y="864">OWASP ZAP</text>
-          <rect class="box" x="669" y="844" width="174" height="30" rx="15"/>
-          <text class="chip-text" x="756" y="864">Prompt-injection tests</text>
-          <rect class="box" x="853" y="844" width="104" height="30" rx="15"/>
-          <text class="chip-text" x="905" y="864">Threat model</text>
+          <rect class="box" x="485" y="844" width="97" height="30" rx="15"/>
+          <text class="chip-text" x="533" y="864">k6 load tests</text>
+          <rect class="box" x="590" y="844" width="97" height="30" rx="15"/>
+          <text class="chip-text" x="638" y="864">Chaos tests</text>
+          <rect class="box" x="695" y="844" width="118" height="30" rx="15"/>
+          <text class="chip-text" x="754" y="864">RAGAS + MLflow</text>
+
+          <rect class="box" x="441" y="886" width="125" height="30" rx="15"/>
+          <text class="chip-text" x="503" y="906">Secrets Manager</text>
+          <rect class="box" x="576" y="886" width="83" height="30" rx="15"/>
+          <text class="chip-text" x="617" y="906">OWASP ZAP</text>
+          <rect class="box" x="669" y="886" width="174" height="30" rx="15"/>
+          <text class="chip-text" x="756" y="906">Prompt-injection tests</text>
+          <rect class="box" x="853" y="886" width="104" height="30" rx="15"/>
+          <text class="chip-text" x="905" y="906">Threat model</text>
         </g>
       </svg>
     </div>
@@ -625,7 +641,7 @@
     </div>
     <div class="card">
       <h3>Next: people act on it</h3>
-      <p>The API and dashboard let a reviewer see the review queue and decide a conflict, such as case <code>MCS-502</code>.</p>
+      <p>The FastAPI backend and Streamlit dashboard let a reviewer see the review queue, track rejection trends, and decide a conflict like case <code>MCS-502</code>.</p>
     </div>
     <div class="card">
       <h3>Later: AI helps</h3>
@@ -649,8 +665,8 @@
     <thead><tr><th>Phase</th><th>Modules</th><th>What it adds</th><th>Status</th></tr></thead>
     <tbody>
       <tr><td><strong>1. Data foundation</strong></td><td>1–2</td><td>MySQL, S3 landing bucket, validation rules, run audit trail, CI</td><td><strong>Built</strong>; 5 extras still open</td></tr>
-      <tr><td>2. Backend API</td><td>3</td><td>FastAPI, auth and roles, order state machine, SQS/SNS, Redis, Postgres + pgvector, tracing, dbt + DuckDB</td><td>Planned</td></tr>
-      <tr><td>3. Ops dashboard</td><td>4</td><td>React app, KPI tiles, review queue, Playwright smoke test</td><td>Planned</td></tr>
+      <tr><td>2. Backend API</td><td>3</td><td>FastAPI, auth and roles, order state machine, SQS/SNS, Redis, Postgres + pgvector. Observability: OpenTelemetry + Grafana + Prometheus + Loki + Tempo</td><td>Planned</td></tr>
+      <tr><td>3. Streamlit dashboard</td><td>4</td><td>Streamlit app: ops (review queue, KPI tiles, run history) + analytics (rejection trends, rule heatmaps, data quality). dbt models for SQL transforms. Containerised in Docker Compose</td><td>Planned</td></tr>
       <tr><td>4. RAG assistant</td><td>5</td><td>Knowledge base, cited answers, model adapter, evals, PII redaction</td><td>Planned</td></tr>
       <tr><td>5. The agent</td><td>6</td><td>LangGraph agent, MCP server, human approval, legacy connector, red-team tests</td><td>Planned</td></tr>
       <tr><td>6. Scale &amp; AI platform</td><td>7–8</td><td>Load tests, rate limiting, Kafka, saga, model gateway, MLflow</td><td>Planned</td></tr>
