@@ -23,6 +23,10 @@ class RunStatus(StrEnum):
     DUPLICATE = "DUPLICATE"  # VR-009: same content already published
 
 
+# new line added for test
+# new line added new feature branch
+
+
 @dataclass(frozen=True)
 class Finding:
     rule_id: str
