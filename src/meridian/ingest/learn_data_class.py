@@ -9,8 +9,9 @@ class Bad:
         if self.cases is None:
             self.cases = []
 
+
 a = Bad()
 b = Bad()
 a.cases.append("C-1")
-print(b.cases)   # what do you expect?
+print(b.cases)  # what do you expect?
 print(a.cases)
