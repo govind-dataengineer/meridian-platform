@@ -25,11 +25,6 @@ LogLevel = Annotated[
 ]
 
 
-def test_function():
-    print("This is a test function to check the code completion.")
-    x: int = "not an integer"
-
-
 @app.callback()
 def _main(log_format: LogFormat = "json", log_level: LogLevel = "INFO") -> None:
     setup_logging(json=log_format == "json", level=log_level)
